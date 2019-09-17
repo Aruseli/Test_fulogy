@@ -4,6 +4,18 @@
 
 Edit `pages/api`.
 
+## use-query
+
+Using url query as state storage.
+
+For example:
+
+```jsx
+const [{ x }, setValue] = useQuery("abc", { x: 1 });
+```
+
+It store `{ x: 1 }` object in query `?abc={x:1}`.
+
 ## picture
 
 Tag `<picture/>` with `responsive-loader` demo page
