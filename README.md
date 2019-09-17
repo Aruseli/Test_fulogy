@@ -4,6 +4,38 @@
 
 Edit `pages/api`.
 
+## analitics
+
+Simple googleAnalitics, yandexMetrika, facebookPixel integration with triggers support.
+
+```js
+import React, { useContext } = 'react';
+import { AnaliticsProvider, Context } from "./packages/analitics";
+
+const props = {
+  facebookPixel: 556647711153866,
+  googleAnalitics: "UA-64254068-3",
+  yandexMetrika: 53888251
+};
+
+const Page = () => {
+  const { trigger } = useContext(Context);
+  return <div
+    onClick={() => {
+      trigger('click', { value: 7 });
+    }}
+  >
+    page
+  </div>;
+};
+
+export default () => {
+  return <AnaliticsProvider {...props}>
+    <Page/>
+  </AnaliticsProvider>;
+};
+```
+
 ## use-query
 
 Using url query as state storage.
