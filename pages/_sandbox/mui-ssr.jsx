@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { Page } from '../../imports/page';
 import _ from 'lodash';
 import { Button } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
+
+import { wrapPage } from '../../imports/wrap-page';
 import { defaultTheme } from '../../imports/themes/default';
 
 const darkTheme = theme =>
@@ -18,9 +19,9 @@ const darkTheme = theme =>
     }),
   );
 
-export default () => {
+export default wrapPage(() => {
   return (
-    <Page>
+    <>
       <ThemeProvider theme={defaultTheme}>
         <Button variant="contained" color="primary">
           demo primary page
@@ -31,6 +32,6 @@ export default () => {
           </Button>
         </ThemeProvider>
       </ThemeProvider>
-    </Page>
+    </>
   );
-};
+});

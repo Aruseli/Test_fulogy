@@ -1,15 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext } from 'react';
 
-import { useTheme, Typography } from "@material-ui/core";
-import { Picture } from "../../imports/packages/picture";
-import { Page } from "../../imports/page";
-import _ from "lodash";
+import { useTheme, Typography } from '@material-ui/core';
+import { Picture } from '../../imports/packages/picture';
+import { wrapPage } from '../../imports/wrap-page';
+import _ from 'lodash';
 
-const ri = require("../../images/sandbox.jpg?sizes[]=1800,sizes[]=1280,sizes[]=960,sizes[]=600,sizes[]=300,sizes[]=100");
+const ri = require('../../images/sandbox.jpg?sizes[]=1800,sizes[]=1280,sizes[]=960,sizes[]=600,sizes[]=300,sizes[]=100');
 
-export default () => {
+export default wrapPage(() => {
   return (
-    <Page>
+    <>
       <div>
         <Typography variant="h3" component="h3">
           Tag picture with responsive-loader demo page
@@ -31,8 +31,8 @@ export default () => {
           </code>
         </pre>
         <Typography variant="body1">
-          Each sended sizes number, will be used as media (min-width) for{" "}
-          {"<picture> <source>"} tag.
+          Each sended sizes number, will be used as media (min-width) for{' '}
+          {'<picture> <source>'} tag.
         </Typography>
         <Typography variant="body1">
           Import our picture wrapper, who convert responsive-loader format into
@@ -45,11 +45,11 @@ export default () => {
         </pre>
         <Typography variant="body1">Just put it some where.</Typography>
         <pre>
-          <code>{"<Picture images={ri.images} src={ri.src}/>"}</code>
+          <code>{'<Picture images={ri.images} src={ri.src}/>'}</code>
         </pre>
         <Picture images={ri.images} src={ri.src} />
         <Typography variant="body1">
-          You can send and {"<img>"} props into {"<Picture>"}
+          You can send and {'<img>'} props into {'<Picture>'}
         </Typography>
         <pre>
           <code>
@@ -58,8 +58,8 @@ export default () => {
             }
           </code>
         </pre>
-        <Picture images={ri.images} src={ri.src} style={{ width: "100%" }} />
+        <Picture images={ri.images} src={ri.src} style={{ width: '100%' }} />
       </div>
-    </Page>
+    </>
   );
-};
+});
