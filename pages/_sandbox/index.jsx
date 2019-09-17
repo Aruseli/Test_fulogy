@@ -18,5 +18,10 @@ export default () => (
         <div>ssr-theme</div>
       </a>
     </Link>
+    <Link href="/_sandbox/mui-ssr">
+      <a>
+        <div>mui-ssr</div>
+      </a>
+    </Link>
   </div>
 );
