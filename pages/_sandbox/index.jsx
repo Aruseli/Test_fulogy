@@ -1,5 +1,5 @@
-import Link from "next/link";
-import "normalize.css";
+import Link from 'next/link';
+import 'normalize.css';
 
 export default () => (
   <div>
@@ -11,6 +11,11 @@ export default () => (
     <Link href="/_sandbox/use-query">
       <a>
         <div>use-query</div>
+      </a>
+    </Link>
+    <Link href="/_sandbox/ssr-theme">
+      <a>
+        <div>ssr-theme</div>
       </a>
     </Link>
   </div>
