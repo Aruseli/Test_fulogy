@@ -71,3 +71,28 @@ You can send any `<img/>` props into `<Picture/>`.
 ```
 
 ## ssr gql
+
+Simple way to use ssr gql.
+
+```jsx
+import React from 'react';
+
+import gql from 'graphql-tag';
+import { useQuery } from '@apollo/react-hooks';
+
+// Includes ../../imports/packages/gql/ssr ssrWrap
+import { wrapPage } from '../../imports/wrap-page';
+
+const query = gql`
+  query {
+    items {
+      id
+    }
+  }
+`;
+
+export default wrapPage(() => {
+  const result = useQuery(query, { ssr: true });
+  return <div>{JSON.stringify(result.data, null, 1)}</div>;
+});
+```

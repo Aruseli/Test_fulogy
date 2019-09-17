@@ -6,7 +6,7 @@ import { ApolloProvider } from '@apollo/react-hooks';
 
 import { initApollo } from './';
 
-export const ssrGql = Content => {
+export const wrapSsrGql = Content => {
   const Component = ({ apolloClient }) => {
     console.log({ apolloClient });
     return (
