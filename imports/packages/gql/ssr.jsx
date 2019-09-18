@@ -8,7 +8,6 @@ import { initApollo } from './';
 
 export const wrapSsrGql = Content => {
   const Component = ({ apolloClient }) => {
-    console.log({ apolloClient });
     return (
       <ApolloProvider client={apolloClient}>
         <Content />
