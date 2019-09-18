@@ -1,11 +1,21 @@
-import React, { useContext } from "react";
+import React, { useContext } from 'react';
 
-import { useTheme } from "@material-ui/core";
-import _ from "lodash";
+import { useTheme } from '@material-ui/core';
+import _ from 'lodash';
 
+/**
+ * Converter responsive-loader format into html tags picture and source.
+ * @example
+ * const ri = require('../images/sandbox.jpg?sizes[]=1800,sizes[]=1280,sizes[]=960,sizes[]=600,sizes[]=300,sizes[]=100');
+ *
+ * <Picture images={ri.images} src={ri.src} style={{ width: '100%' }} />
+ * @param {object} props
+ * @param {object[]} props.images
+ * @param {string} props.images.$.path
+ * @param {number} props.images.$.width
+ * @param {number} props.images.$.height
+ */
 export const Picture = ({ images, src, ...props }) => {
-  const theme = useTheme();
-
   return (
     <picture>
       {images.map((image, i) => {
@@ -14,7 +24,7 @@ export const Picture = ({ images, src, ...props }) => {
             key={i}
             srcSet={image.path}
             media={`(min-width: ${image.width}px)`}
-            type={image.type || "image/jpeg"}
+            type={image.type || 'image/jpeg'}
           />
         );
       })}

@@ -9,7 +9,21 @@ import { ApolloProvider } from '@apollo/react-hooks';
 
 const GRAPHQL = 'isg-hasura.herokuapp.com/v1/graphql';
 
-export function initApollo(initialState = {}, options = {}) {
+// TODO token and secret
+
+/**
+ * Generate ApolloClient with ssr and subscriptions support.
+ * @description
+ * By default create anonmous connection.
+ * You can provide token for Authorization Bearer or secret for x-hasura-admin-secret headers.
+ * Attention! token and secret disabled!
+ * @param {object} initialState
+ * @param {object} options
+ * @param {string=} options.token
+ * @param {string=} options.secret
+ * @returns {ApolloClient} ApolloClient
+ */
+export function generateApolloClient(initialState = {}, options = {}) {
   const headers = {
     // ...(options.token ? {
     //   'Authorization': `Bearer ${options.token}`,

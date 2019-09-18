@@ -4,8 +4,13 @@ import { getDataFromTree } from '@apollo/react-ssr';
 
 import { ApolloProvider } from '@apollo/react-hooks';
 
-import { initApollo } from './';
+import { generateApolloClient } from './';
 
+/**
+ * Wrap page for privide apolloClient and build server render based on nextjs async getInitialProps.
+ * @param {function} Component
+ * @returns {function} WrappedComponent
+ */
 export const wrapSsrGql = Content => {
   const Component = ({ apolloClient }) => {
     return (
@@ -16,7 +21,7 @@ export const wrapSsrGql = Content => {
   };
 
   const Page = ({ apolloState, token }) => {
-    const apolloClient = initApollo(apolloState, { token });
+    const apolloClient = generateApolloClient(apolloState, { token });
     const container = <Component apolloClient={apolloClient} token={token} />;
     apolloClient.stop();
     return container;
@@ -27,7 +32,7 @@ export const wrapSsrGql = Content => {
 
     const { req } = props;
     const token = req && req.cookies ? req.cookies.token : undefined;
-    const apolloClient = initApollo({}, { token });
+    const apolloClient = generateApolloClient({}, { token });
     await getDataFromTree(
       <Component apolloClient={apolloClient} token={token} />,
     );
