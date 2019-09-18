@@ -7,8 +7,6 @@ import { split, ApolloLink, concat } from 'apollo-link';
 import { getDataFromTree } from '@apollo/react-ssr';
 import { ApolloProvider } from '@apollo/react-hooks';
 
-const GRAPHQL = 'isg-hasura.herokuapp.com/v1/graphql';
-
 // TODO token and secret
 
 /**
@@ -21,22 +19,25 @@ const GRAPHQL = 'isg-hasura.herokuapp.com/v1/graphql';
  * @param {object} options
  * @param {string=} options.token
  * @param {string=} options.secret
+ * @param {string} options.gqlPath
  * @returns {ApolloClient} ApolloClient
  */
 export function generateApolloClient(initialState = {}, options = {}) {
   const headers = {
-    // ...(options.token ? {
-    //   'Authorization': `Bearer ${options.token}`,
-    // } : {}),
-    // ...(options.secret ? {
-    //   'x-hasura-admin-secret': `${options.secret}`,
-    // } : {}),
-    'x-hasura-admin-secret': '1234',
+    ...(options.secret
+      ? {
+          'x-hasura-admin-secret': `${options.secret}`,
+        }
+      : options.token
+      ? {
+          Authorization: `Bearer ${options.token}`,
+        }
+      : {}),
     ...options.headers,
   };
 
   const httpLink = new HttpLink({
-    uri: `https://${GRAPHQL}`,
+    uri: `https://${options.gqlPath}`,
     fetch,
   });
 
@@ -44,7 +45,7 @@ export function generateApolloClient(initialState = {}, options = {}) {
   const wsLink = !process.browser
     ? null
     : new WebSocketLink({
-        uri: `wss://${GRAPHQL}`,
+        uri: `wss://${options.gqlPath}`,
         options: {
           lazy: true,
           reconnect: true,

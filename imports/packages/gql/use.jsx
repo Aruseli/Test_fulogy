@@ -29,8 +29,6 @@ export function useGql(queryString, options = {}) {
   const qr = useQuery(query, { ssr: true, ...options });
   const sr = useSubscription(subscription, options);
 
-  console.log({ qr, sr });
-
   if (sr && sr.loading)
     return { data: qr.data, loading: qr.loading, error: qr.error };
   return { data: sr.data, loading: sr.loading, error: sr.error };

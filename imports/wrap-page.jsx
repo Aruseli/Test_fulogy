@@ -2,6 +2,7 @@ import 'normalize.css';
 
 import { AnaliticsProvider } from './packages/analitics';
 import analiticsConfig from './analitics.config';
+import gqlConfig from './gql.config';
 import { wrapSsrGql } from './packages/gql/ssr';
 
 /**
@@ -10,11 +11,14 @@ import { wrapSsrGql } from './packages/gql/ssr';
  * @returns {function} WrappedComponent
  */
 export const wrapPage = Component => {
-  return wrapSsrGql(() => {
-    return (
-      <AnaliticsProvider {...analiticsConfig}>
-        <Component />
-      </AnaliticsProvider>
-    );
+  return wrapSsrGql({
+    ...gqlConfig,
+    Component: () => {
+      return (
+        <AnaliticsProvider {...analiticsConfig}>
+          <Component />
+        </AnaliticsProvider>
+      );
+    },
   });
 };

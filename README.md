@@ -78,7 +78,7 @@ Simple way to use ssr gql.
 import React from 'react';
 
 import gql from 'graphql-tag';
-import { useQuery } from '@apollo/react-hooks';
+import { useGql, useMutation } from '../../imports/packages/gql/use';
 
 // Includes ../../imports/packages/gql/ssr ssrWrap
 import { wrapPage } from '../../imports/wrap-page';
@@ -92,7 +92,10 @@ const query = gql`
 `;
 
 export default wrapPage(() => {
-  const result = useQuery(query, { ssr: true });
+  const result = useGql(query);
+  // query and cache on server
+  // query from cache on client
+  // subscribe
   return <div>{JSON.stringify(result.data, null, 1)}</div>;
 });
 ```

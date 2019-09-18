@@ -8,10 +8,13 @@ import { generateApolloClient } from './';
 
 /**
  * Wrap page for privide apolloClient and build server render based on nextjs async getInitialProps.
- * @param {function} Component
+ * @param {object} options
+ * @param {function} options.Component
+ * @param {string=} options.gqlSecret
+ * @param {string=} options.gqlPath
  * @returns {function} WrappedComponent
  */
-export const wrapSsrGql = Content => {
+export const wrapSsrGql = ({ Component: Content, gqlSecret, gqlPath }) => {
   const Component = ({ apolloClient }) => {
     return (
       <ApolloProvider client={apolloClient}>
@@ -21,7 +24,11 @@ export const wrapSsrGql = Content => {
   };
 
   const Page = ({ apolloState, token }) => {
-    const apolloClient = generateApolloClient(apolloState, { token });
+    const apolloClient = generateApolloClient(apolloState, {
+      token,
+      secret: gqlSecret,
+      gqlPath,
+    });
     const container = <Component apolloClient={apolloClient} token={token} />;
     apolloClient.stop();
     return container;
@@ -32,7 +39,10 @@ export const wrapSsrGql = Content => {
 
     const { req } = props;
     const token = req && req.cookies ? req.cookies.token : undefined;
-    const apolloClient = generateApolloClient({}, { token });
+    const apolloClient = generateApolloClient(
+      {},
+      { token, secret: gqlSecret, gqlPath },
+    );
     await getDataFromTree(
       <Component apolloClient={apolloClient} token={token} />,
     );
