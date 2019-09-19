@@ -1,5 +1,19 @@
 # sandbox
 
+## env
+
+> If you need to use sandbox not only for hasura gql, pls make PR.
+
+In process environment must be defined:
+
+```sh
+GQL_SECRET='<x-hasura-admin-secret>'
+GQL_PATH='<gqlurl>'
+FB_TOKEN=0
+GA_TOKEN=''
+YM_TOKEN=0
+```
+
 ## proxy
 
 Edit `pages/api`.
