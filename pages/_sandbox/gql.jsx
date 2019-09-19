@@ -6,7 +6,7 @@ import { useGql, useMutation } from '../../imports/packages/gql/use';
 
 const QUERY = gql`
   query {
-    items {
+    _sandbox {
       id
     }
   }
@@ -14,7 +14,7 @@ const QUERY = gql`
 
 const CLEAR = gql`
   mutation {
-    delete_items(where: {}) {
+    delete__sandbox(where: {}) {
       returning {
         id
       }
@@ -24,7 +24,7 @@ const CLEAR = gql`
 
 const ADD = gql`
   mutation {
-    insert_items(objects: {}) {
+    insert__sandbox(objects: {}) {
       returning {
         id
       }
