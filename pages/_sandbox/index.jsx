@@ -23,5 +23,10 @@ export default () => (
         <div>gql</div>
       </a>
     </Link>
+    <Link href="/_sandbox/graphiql">
+      <a>
+        <div>graphiql</div>
+      </a>
+    </Link>
   </div>
 );

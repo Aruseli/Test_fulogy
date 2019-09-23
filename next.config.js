@@ -30,7 +30,9 @@ module.exports = withPlugins(
         new Dotenv({
           path: path.join(__dirname, '.env'),
           systemvars: true
-        })
+        }),
+
+        new webpack.IgnorePlugin(/\.flow$/),
       ]
   
       return config;

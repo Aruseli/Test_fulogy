@@ -27,7 +27,7 @@ export const wrapSsrGql = ({ Component: Content, gqlSecret, gqlPath }) => {
     const apolloClient = generateApolloClient(apolloState, {
       token,
       secret: gqlSecret,
-      gqlPath,
+      path: gqlPath,
     });
     const container = <Component apolloClient={apolloClient} token={token} />;
     apolloClient.stop();
@@ -41,7 +41,11 @@ export const wrapSsrGql = ({ Component: Content, gqlSecret, gqlPath }) => {
     const token = req && req.cookies ? req.cookies.token : undefined;
     const apolloClient = generateApolloClient(
       {},
-      { token, secret: gqlSecret, gqlPath },
+      {
+        token,
+        secret: gqlSecret,
+        path: gqlPath,
+      },
     );
     await getDataFromTree(
       <Component apolloClient={apolloClient} token={token} />,

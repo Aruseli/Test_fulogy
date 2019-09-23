@@ -1,5 +1,14 @@
 # sandbox
 
+## how
+
+```sh
+git clone url sandbox
+cd sandbox
+npm i
+npm run dev
+```
+
 ## env
 
 > If you need to use sandbox not only for hasura gql, pls make PR.
@@ -113,3 +122,7 @@ export default wrapPage(() => {
   return <div>{JSON.stringify(result.data, null, 1)}</div>;
 });
 ```
+
+## graphiql with explorer
+
+Example on `/_sandbox/graphiql`.

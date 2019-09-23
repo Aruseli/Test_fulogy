@@ -7,22 +7,7 @@ import { split, ApolloLink, concat } from 'apollo-link';
 import { getDataFromTree } from '@apollo/react-ssr';
 import { ApolloProvider } from '@apollo/react-hooks';
 
-// TODO token and secret
-
-/**
- * Generate ApolloClient with ssr and subscriptions support.
- * @description
- * By default create anonmous connection.
- * You can provide token for Authorization Bearer or secret for x-hasura-admin-secret headers.
- * Attention! token and secret disabled!
- * @param {object} initialState
- * @param {object} options
- * @param {string=} options.token
- * @param {string=} options.secret
- * @param {string} options.gqlPath
- * @returns {ApolloClient} ApolloClient
- */
-export function generateApolloClient(initialState = {}, options = {}) {
+export function generateHeaders(options) {
   const headers = {
     ...(options.secret
       ? {
@@ -35,9 +20,29 @@ export function generateApolloClient(initialState = {}, options = {}) {
       : {}),
     ...options.headers,
   };
+  return headers;
+};
+
+// TODO token and secret
+
+/**
+ * Generate ApolloClient with ssr and subscriptions support.
+ * @description
+ * By default create anonmous connection.
+ * You can provide token for Authorization Bearer or secret for x-hasura-admin-secret headers.
+ * Attention! token and secret disabled!
+ * @param {object} initialState
+ * @param {object} options
+ * @param {string=} options.token
+ * @param {string=} options.secret
+ * @param {string} options.path
+ * @returns {ApolloClient} ApolloClient
+ */
+export function generateApolloClient(initialState = {}, options = {}) {
+  const headers = generateHeaders(options);
 
   const httpLink = new HttpLink({
-    uri: `https://${options.gqlPath}`,
+    uri: `https://${options.path}`,
     fetch,
   });
 
@@ -45,7 +50,7 @@ export function generateApolloClient(initialState = {}, options = {}) {
   const wsLink = !process.browser
     ? null
     : new WebSocketLink({
-        uri: `wss://${options.gqlPath}`,
+        uri: `wss://${options.path}`,
         options: {
           lazy: true,
           reconnect: true,
