@@ -33,5 +33,10 @@ export default () => (
         <div>graph</div>
       </a>
     </Link>
+    <Link href="/_sandbox/react-spring">
+      <a>
+        <div>react-spring</div>
+      </a>
+    </Link>
   </div>
 );
