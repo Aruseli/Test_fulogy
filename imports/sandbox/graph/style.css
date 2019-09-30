@@ -1,7 +1,3 @@
-body {
-  overflow: hidden;
-}
-
 /* Temp visual fix of clipboard button */
 .copy-to-clipboard-container {
   height: 14px;
