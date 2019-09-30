@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 
-const fakeRouter = {};
+export const fakeRouter = {};
 
 /**
  * Using url query as state storage. Same as `useState`
@@ -10,9 +10,9 @@ const fakeRouter = {};
  * @param {*} defaultValue
  * @returns {object} result - [value, setValue] as `useState`
  */
-export function useQuery(name, defaultValue) {
+export function useUrlState(name, defaultValue) {
   const router = useRouter();
-
+  
   const { query, pathname, push } = router || fakeRouter;
 
   const result = [
@@ -31,4 +31,4 @@ export function useQuery(name, defaultValue) {
   return result;
 }
 
-export default useQuery;
+export default useUrlState;

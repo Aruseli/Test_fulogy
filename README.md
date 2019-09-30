@@ -59,7 +59,7 @@ export default () => {
 };
 ```
 
-## use-query
+## use-url-state
 
 Using url query as state storage.
 

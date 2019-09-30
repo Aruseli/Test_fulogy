@@ -8,9 +8,9 @@ export default () => (
         <div>picture</div>
       </a>
     </Link>
-    <Link href="/_sandbox/use-query">
+    <Link href="/_sandbox/use-url-state">
       <a>
-        <div>use-query</div>
+        <div>use-url-state</div>
       </a>
     </Link>
     <Link href="/_sandbox/mui-ssr">
@@ -26,6 +26,11 @@ export default () => (
     <Link href="/_sandbox/graphiql">
       <a>
         <div>graphiql</div>
+      </a>
+    </Link>
+    <Link href="/_sandbox/graph">
+      <a>
+        <div>graph</div>
       </a>
     </Link>
   </div>

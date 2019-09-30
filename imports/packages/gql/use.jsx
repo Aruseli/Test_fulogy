@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import Gql from 'graphql-tag';
 import { useQuery, useSubscription } from '@apollo/react-hooks';
 import _ from 'lodash';
 
@@ -11,11 +11,11 @@ export { useQuery, useSubscription, useMutation } from '@apollo/react-hooks';
  * @property {*} error
  */
 
-export const toGqls = _.memoize(query => {
-  return {
-    query: gql`query ${query.loc.source.body}`,
-    subscription: gql`subscription ${query.loc.source.body}`,
-  };
+export const toGqls = _.memoize(queryString => {
+  return queryString ? {
+    query: Gql`query ${queryString}`,
+    subscription: Gql`subscription ${queryString}`,
+  } : {};
 });
 
 /**
@@ -26,10 +26,15 @@ export const toGqls = _.memoize(query => {
  */
 export function useGql(queryString, options = {}) {
   const { query, subscription } = toGqls(queryString);
+
   const qr = useQuery(query, { ssr: true, ...options });
   const sr = useSubscription(subscription, options);
 
   if (sr && sr.loading)
     return { data: qr.data, loading: qr.loading, error: qr.error };
   return { data: sr.data, loading: sr.loading, error: sr.error };
+}
+
+export function gql(strings) {
+  return strings[0];
 }

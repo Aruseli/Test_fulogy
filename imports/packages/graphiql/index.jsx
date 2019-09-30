@@ -72,6 +72,7 @@ export default ({
   explorerIsOpen,
   setExplorerIsOpen,
   fetcher,
+  buttons,
 }) => {
   const _graphiql = createRef();
   const [schema, setSchema] = useState(null);
@@ -81,55 +82,63 @@ export default ({
       fetcher({
         query: getIntrospectionQuery()
       }).then(result => {
-        const editor = _graphiql.current.getQueryEditor();
-        editor.setOption("extraKeys", {
-          ...(editor.options.extraKeys || {}),
-          "Shift-Alt-LeftClick": _handleInspectOperation(query)
-        });
-        setSchema(buildClientSchema(result.data));
+        if (_graphiql.current) {
+          const editor = _graphiql.current.getQueryEditor();
+          editor.setOption("extraKeys", {
+            ...(editor.options.extraKeys || {}),
+            "Shift-Alt-LeftClick": _handleInspectOperation(query)
+          });
+          setSchema(buildClientSchema(result.data));
+        }
       });
     }
   }, [explorerIsOpen]);
 
-  return <div className="graphiql-container" style={{ position: 'absolute' }}>
-    {process.browser && <>
-      <GraphiQLExplorer
-        schema={schema}
-        query={query}
-        onEdit={setQuery}
-        onRunOperation={operationName =>
-          _graphiql.current.handleRunQuery(operationName)
-        }
-        explorerIsOpen={explorerIsOpen}
-        onToggleExplorer={() => setExplorerIsOpen(!explorerIsOpen)}
-        getDefaultScalarArgValue={getDefaultScalarArgValue}
-        makeDefaultArg={makeDefaultArg}
-      />
-      <GraphiQL
-        ref={_graphiql}
-        fetcher={fetcher}
-        schema={schema}
-        query={query}
-        onEditQuery={setQuery}
-      >
-        <GraphiQL.Toolbar>
-          <GraphiQL.Button
-            onClick={() => _graphiql.current.handlePrettifyQuery()}
-            label="Prettify"
-            title="Prettify Query (Shift-Ctrl-P)"
+  return <div><div className="graphiql-container" style={{ position: 'absolute' }}>
+    <GraphiQLExplorer
+      schema={schema}
+      query={query}
+      onEdit={setQuery}
+      onRunOperation={operationName =>
+        _graphiql.current.handleRunQuery(operationName)
+      }
+      explorerIsOpen={explorerIsOpen}
+      onToggleExplorer={() => setExplorerIsOpen(!explorerIsOpen)}
+      getDefaultScalarArgValue={getDefaultScalarArgValue}
+      makeDefaultArg={makeDefaultArg}
+    />
+    {!process.browser ? <></> : <GraphiQL
+      ref={_graphiql}
+      fetcher={fetcher}
+      schema={schema}
+      query={query}
+      onEditQuery={setQuery}
+    >
+      <GraphiQL.Toolbar>
+        <GraphiQL.Button
+          onClick={() => _graphiql.current.handlePrettifyQuery()}
+          label="Prettify"
+          title="Prettify Query (Shift-Ctrl-P)"
+        />
+        <GraphiQL.Button
+          onClick={() => _graphiql.current.handleToggleHistory()}
+          label="History"
+          title="Show History"
+        />
+        <GraphiQL.Button
+          onClick={() => setExplorerIsOpen(!explorerIsOpen)}
+          label="Explorer"
+          title="Toggle Explorer"
+        />
+        {!!buttons && !!buttons.length && buttons.map((button, i) => {
+          return <GraphiQL.Button
+            key={button._id || i}
+            onClick={button.onClick}
+            label={button.label}
+            title={button.title}
           />
-          <GraphiQL.Button
-            onClick={() => _graphiql.current.handleToggleHistory()}
-            label="History"
-            title="Show History"
-          />
-          <GraphiQL.Button
-            onClick={() => setExplorerIsOpen(!explorerIsOpen)}
-            label="Explorer"
-            title="Toggle Explorer"
-          />
-        </GraphiQL.Toolbar>
-      </GraphiQL>
-    </>}
-  </div>;
+        })}
+      </GraphiQL.Toolbar>
+    </GraphiQL>}
+  </div></div>;
 };

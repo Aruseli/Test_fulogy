@@ -1,7 +1,7 @@
-import 'normalize.css';
-
 import { AnaliticsProvider } from './packages/analitics';
 import { wrapSsrGql } from './packages/gql/ssr';
+
+import 'normalize.css';
 
 /**
  * Base app page wrapper. Provide ssr gql and analitics.

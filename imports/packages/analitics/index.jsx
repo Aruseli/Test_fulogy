@@ -97,7 +97,7 @@ export const AnaliticsProvider = ({
 
   return (
     <>
-      <YMInitializer
+      {!!yandexMetrika && <YMInitializer
         accounts={[yandexMetrika]}
         options={{
           clickmap: true,
@@ -110,7 +110,7 @@ export const AnaliticsProvider = ({
           },
         }}
         version="2"
-      />
+      />}
       {content}
     </>
   );
