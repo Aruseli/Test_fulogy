@@ -37,5 +37,6 @@ module.exports = withPlugins(
   
       return config;
     },
+    assetPrefix: process.env.NODE_ENV === 'production' ? '/{reponame}' : '',
   },
 );
