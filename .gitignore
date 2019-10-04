@@ -74,6 +74,7 @@ version.desktop
 
 # next
 .next
+/out
 
 # typedoc
 docs

@@ -8,6 +8,8 @@ const withPlugins = require("next-compose-plugins");
 const withCSS = require("@zeit/next-css");
 const optimizedImages = require("next-optimized-images");
 
+const [username, repository] = require('./package.json').repository.split('/');
+
 module.exports = withPlugins(
   [
     [
@@ -37,6 +39,6 @@ module.exports = withPlugins(
   
       return config;
     },
-    assetPrefix: process.env.NODE_ENV === 'production' ? '/{reponame}' : '',
+    assetPrefix: process.env.NODE_ENV === 'production' ? '/{repository}' : '',
   },
 );

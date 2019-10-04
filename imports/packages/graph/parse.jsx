@@ -168,5 +168,11 @@ export function useParsed(
     }
   }
 
+  for (let l in links) {
+    if (!nodes[links[l].source] || !nodes[links[l].target]) {
+      delete links[l];
+    }
+  }
+
   return onlyChanged(results, { nodes, links });
 };

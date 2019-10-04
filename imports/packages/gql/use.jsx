@@ -1,8 +1,18 @@
 import Gql from 'graphql-tag';
-import { useQuery, useSubscription } from '@apollo/react-hooks';
+import { useQuery as _useQuery, useSubscription as _useSubscription, useMutation as _useMutation, useApolloClient as _useApolloClient } from '@apollo/react-hooks';
 import _ from 'lodash';
 
-export { useQuery, useSubscription, useMutation } from '@apollo/react-hooks';
+export function useQuery(query, ...args) {
+  return _useQuery(toGql(query), ...args);
+};
+
+export function useSubscription(query, ...args) {
+  return _useSubscription(toGql(query), ...args);
+};
+
+export function useMutation(query, ...args) {
+  return _useMutation(toGql(query), ...args);
+};
 
 /**
  * @typedef {object} UseGraphqlResult
@@ -38,3 +48,7 @@ export function useGql(queryString, options = {}) {
 export function gql(strings) {
   return strings[0];
 }
+
+export const toGql = _.memoize((string) => {
+  return Gql`${string}`;
+});

@@ -4,9 +4,9 @@ import _ from 'lodash';
 import { Paper, Button, makeStyles, Grid, Tabs, Tab } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import { Resizable } from 're-resizable';
+import uniqid from 'uniqid';
 
-import LayersOutlinedIcon from '@material-ui/icons/LayersOutlined';
-import LayersClearOutlinedIcon from '@material-ui/icons/LayersClearOutlined';
+import { InsertLink, Done, Clear, Link, LinkOff, LayersOutlined, LayersClearOutlined, icon, RadioButtonChecked, RadioButtonUnchecked, AddCircleOutline, Add } from '@material-ui/icons';
 
 import { wrapPage } from '../../imports/wrap-page';
 import { useGql, useMutation, toGqls, gql } from '../../imports/packages/gql/use';
@@ -19,6 +19,8 @@ import Graphiql, { generateGraphiqlFetcher } from '../../imports/packages/graphi
 
 import { defaultTheme } from '../../imports/themes/default';
 import { Results } from '../../imports/sandbox/graph/results';
+import { ReactJson } from '../../imports/packages/react-json';
+import { useSnackbar } from 'notistack';
 
 const QUERY = gql`{
   nodes {
@@ -48,22 +50,158 @@ const QUERY = gql`{
   }
 }`;
 
+const ADD_ROOT_NODE = gql`mutation AddRootNode($nodeId: String) {
+  insert_nodes(objects: {id: $nodeId}) {
+    returning {
+      id
+    }
+  }
+}`;
+
+const ADD_CHILD_NODE = gql`mutation AddChildNode(
+  $nodeId: String,
+  $sourceNodeId: String
+) {
+  insert_nodes(objects: {
+    links_by_target: {data: {
+      source_id: $sourceNodeId,
+      type_id: 1
+    }},
+    id: $nodeId
+  }) {
+    returning {
+      id
+    }
+  }
+}`;
+
+const INSERT_LINK = gql`mutation InsertLink(
+  $sourceId: String,
+  $targetId: String,
+) {
+  insert_links(objects: {
+    source_id: $sourceId,
+    target_id: $targetId,
+    type_id: 1
+  }) {
+    returning {
+      id
+    }
+  }
+}`;
+
+const DELETE_NODE = gql`mutation DeleteNode($id: String) {
+  delete_nodes(where: {id: {_eq: $id}}) {
+    returning {
+      id
+    }
+  }
+}`;
+
+const DELETE_LINK = gql`mutation DeleteNode($id: Int) {
+  delete_links(where: {id: {_eq: $id}}) {
+    returning {
+      id
+    }
+  }
+}`;
+
 const _fetcher = generateGraphiqlFetcher({
   path: process.env.GQL_PATH,
   secret: process.env.GQL_SECRET,
 });
 
 export default wrapPage(() => {
+  const { enqueueSnackbar } = useSnackbar();
+
   const [gql, setGql] = useUrlState('gql', { query: QUERY });
-  
+
   const [query, setQuery] = useState(gql.query);
 
   const [giqlExplorerIsOpen, setGiqlExplorerIsOpen] = useState(true);
-  const [giqlSizeType, setGiqlSizeType] = useState({ height: 200 });
-  const [giqlVisible, setGiqlVisible] = useState(true);
-  const [giqlLayers, setGiqlLayers] = useState(false);
 
+  const [layers, setLayers] = useState(false);
+  const [topPanelSize, setTopPanelSizeType] = useState({ height: 200 });
+  const [topPanelValue, _setTopPanelValue] = useState('gql');
+  const setTopPanelValue = (value) => {
+    _setTopPanelValue(topPanelValue === value ? null : value);
+  };
   const [viewMode, setViewMode] = useState('3d');
+
+  const [selected, setSelected] = useState(null);
+  const [linking, setLinking] = useState(null);
+
+  const [addRootNode] = useMutation(ADD_ROOT_NODE, {
+    onCompleted: () => enqueueSnackbar('ADD_ROOT_NODE completed'),
+    onError: (error) => enqueueSnackbar(`ADD_ROOT_NODE error ${error}`, { variant: 'error' }),
+  });
+  const [addChildNode] = useMutation(ADD_CHILD_NODE, {
+    onCompleted: () => enqueueSnackbar('ADD_CHILD_NODE completed'),
+    onError: (error) => enqueueSnackbar(`ADD_CHILD_NODE error ${error}`, { variant: 'error' }),
+  });
+  const [deleteNode] = useMutation(DELETE_NODE, {
+    onCompleted: () => enqueueSnackbar('DELETE_NODE completed'),
+    onError: (error) => enqueueSnackbar(`DELETE_NODE error ${error}`, { variant: 'error' }),
+  });
+  const [deleteLink] = useMutation(DELETE_LINK, {
+    onCompleted: () => enqueueSnackbar('DELETE_LINK completed'),
+    onError: (error) => enqueueSnackbar(`DELETE_LINK error ${error}`, { variant: 'error' }),
+  });
+  const [insertLink] = useMutation(INSERT_LINK, {
+    onCompleted: () => enqueueSnackbar('INSERT_LINK completed'),
+    onError: (error) => enqueueSnackbar(`INSERT_LINK error ${error}`, { variant: 'error' }),
+  });
+
+  const onNodeClick = (node) => {
+    if (linking === true) {
+      setLinking(node);
+    } else {
+      setSelected(node);
+      topPanelValue !== 'selected' && setTopPanelValue('selected');
+    }
+  };
+
+
+  const deleteSelected = () => {
+    if (selected.__typename === 'nodes') {
+      deleteNode({ variables: { id: selected.id } });
+    } else if (selected.__typename === 'links') {
+      deleteLink({ variables: { id: selected.id } });
+    } else {
+      enqueueSnackbar(`cant delete ${selected.__typename}`);
+    }
+    setSelected(null);
+  };
+
+  const addChildSelected = () => {
+    addChildNode({
+      variables: {
+        nodeId: uniqid(),
+        sourceNodeId: selected.id,
+      },
+    });
+  };
+
+  const makeLink = () => {
+    setLinking(true);
+  };
+  const doneLink = () => {
+    insertLink({
+      variables: {
+        sourceId: selected.id,
+        targetId: linking.id,
+      },
+    });
+    setSelected(null);
+    setLinking(null);
+  };
+  const cancelLink = () => {
+    setLinking(null);
+  };
+
+  const addRoot = () => {
+    addRootNode({ variables: { nodeId: uniqid() } });
+  };
 
   const fetcher = async (params) => {
     const result = await _fetcher(params);
@@ -78,7 +216,7 @@ export default wrapPage(() => {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <>
       <Paper
         style={{
           position: 'absolute',
@@ -93,16 +231,41 @@ export default wrapPage(() => {
           <Grid item>
             <Grid container justify="flex-start" alignItems="center">
               <Grid item>
-                <Tabs value={giqlVisible ? 'giql' : null}>
-                  <Tab value="giql" onClick={() => setGiqlVisible(!giqlVisible)} label="GQL"/>
+                <Tabs value={topPanelValue === 'gql' ? 'giql' : 'none'}>
+                  <Tab value="none" label="" style={{ display: 'none' }}/>
+                  <Tab value="giql" onClick={() => {
+                    setTopPanelValue('gql');
+                  }} label="GQL"/>
                 </Tabs>
               </Grid>
               <Grid item>
-                <Tabs value={giqlLayers ? 'layers' : null}>
-                  <Tab value="layers" onClick={() => setGiqlLayers(!giqlLayers)} icon={giqlLayers ? <LayersOutlinedIcon/> : <LayersClearOutlinedIcon/>}/>
+                <Tabs value={layers ? 'layers' : 'none'}>
+                  <Tab value="none" label="" style={{ display: 'none' }}/>
+                  <Tab value="layers" onClick={() => setLayers(!layers)} icon={layers ? <LayersOutlined/> : <LayersClearOutlined/>}/>
                 </Tabs>
               </Grid>
             </Grid>
+          </Grid>
+          <Grid item>
+            <Tabs value={topPanelValue === 'selected' ? 'selected' : 'none'}>
+              <Tab value="none" label="" style={{ display: 'none' }}/>
+              <Tab
+                value="selected"
+                onClick={() => setTopPanelValue('selected')}
+                icon={selected ? `selected ${selected.id}` : 'not selected'}
+              />
+              <Tab disabled={!selected} value="deleteSelected" onClick={deleteSelected} icon={<Clear/>}/>
+              <Tab disabled={!selected} value="addChild" onClick={addChildSelected} icon={<AddCircleOutline/>}/>
+              <Tab value="add" onClick={addRoot} icon={<Add/>}/>
+            </Tabs>
+          </Grid>
+          <Grid item>
+            <Tabs value={linking ? 'makeLink' : 'none'}>
+              <Tab value="none" label="" style={{ display: 'none' }}/>
+              <Tab disabled={!selected} value="makeLink" onClick={makeLink} icon={linking ? linking === true ? 'linking' : `${selected.id} > ${linking.id}` : 'make link'}/>
+              <Tab disabled={!selected || !linking} value="doneLink" onClick={doneLink} icon={<Done/>}/>
+              <Tab disabled={!selected || !linking} value="cancelLink" onClick={cancelLink} icon={<Clear/>}/>
+            </Tabs>
           </Grid>
           <Grid item>
             <Tabs value={viewMode}>
@@ -120,9 +283,9 @@ export default wrapPage(() => {
           left: 0, top: 48,
           overflow: 'hidden',
           width: '100%',
-          height: giqlSizeType.size,
+          height: topPanelSize.size,
           ...(
-            giqlVisible
+            topPanelValue
             ? {
               top: 48,
             }
@@ -132,17 +295,17 @@ export default wrapPage(() => {
           ),
           transition: 'top 1s ease',
         }}
-        elevation={giqlVisible ? giqlLayers ? 6 : 2 : 0}
+        elevation={topPanelValue ? layers ? 6 : 2 : 0}
       >
         <Resizable
-          size={{ width: '100%', height: giqlSizeType.height }}
+          size={{ width: '100%', height: topPanelSize.height }}
           onResizeStop={(e, direction, ref, d) => {
-            setGiqlSizeType({
-              height: giqlSizeType.height + d.height,
+            setTopPanelSizeType({
+              height: topPanelSize.height + d.height,
             });
           }}
         >
-          <div>
+          {topPanelValue === 'gql' && <div>
             <Graphiql
               query={query}
               setQuery={setQuery}
@@ -151,24 +314,42 @@ export default wrapPage(() => {
               fetcher={fetcher}
               buttons={[
                 {
-                  onClick: () => setGiqlVisible(false),
+                  onClick: () => setTopPanelValue(null),
                   label: 'Hide',
                   title: 'Hide Graphiql',
                 },
               ]}
             />
-          </div>
+          </div>}
+          {topPanelValue === 'selected' && selected && <div style={{
+            padding: 16, 
+            boxSizing: 'border-box',
+            overflowY: 'scroll',
+            height: '100%',
+            width: '100%',
+          }}>
+            <ReactJson
+              src={selected}
+              indentWidth={2}
+              displayDataTypes={false}
+            />
+          </div>}
         </Resizable>
       </Paper>
       <div style={{
         position: 'absolute',
         left: 0,
-        bottom: 5,
+        bottom: 0,
         width: '100%',
-        height: giqlLayers || !giqlVisible ? 'calc(100% - 48px)' : `calc(100% - 48px - ${giqlSizeType.height}px)`,
+        height: layers || !topPanelValue ? 'calc(100% - 48px)' : `calc(100% - 48px - ${topPanelSize.height}px)`,
       }}>
-        <Results query={gql.query} variables={gql.variables} viewMode={viewMode}/>
+        <Results
+          query={gql.query}
+          variables={gql.variables}
+          viewMode={viewMode}
+          onNodeClick={onNodeClick}
+        />
       </div>
-    </ThemeProvider>
+    </>
   );
 });

@@ -1,8 +1,7 @@
 import React from 'react';
-import gql from 'graphql-tag';
 
 import { wrapPage } from '../../imports/wrap-page';
-import { useGql, useMutation } from '../../imports/packages/gql/use';
+import { gql, useGql, useMutation } from '../../imports/packages/gql/use';
 
 const QUERY = gql`
   query {
