@@ -3,23 +3,21 @@ import { render } from 'react-dom';
 import { useTrail, animated } from 'react-spring';
 
 import VisibilitySensor from 'react-visibility-sensor';
+import { Typography } from '@material-ui/core';
 
-const items = [
-  'fdsa fds afsa fdsa fds afsda fdsa fsad fdsa fdsa fds',
-  'ipsum',
-  'dolor',
-  'sit',
-];
 const config = { mass: 5, tension: 2000, friction: 200 };
 
-export const SpringSensorTrail = () => {
+export const SpringSensorTrail = ({
+  items = ['abc','def','qwe'],
+  itemHeight = 30,
+}) => {
   const [toggle, setToggle] = useState(true);
 
   const trail = useTrail(items.length, {
     config,
     opacity: toggle ? 1 : 0,
     x: toggle ? 0 : 20,
-    height: toggle ? 30 : 0,
+    height: toggle ? itemHeight : 0,
     from: { opacity: 0, x: 20, height: 0 },
   });
 
@@ -32,7 +30,7 @@ export const SpringSensorTrail = () => {
         <div
           style={{
             background: 'gray',
-            height: 120,
+            height: itemHeight * items.length,
           }}
         >
           {trail.map(({ x, height, ...rest }, index) => (
@@ -40,7 +38,7 @@ export const SpringSensorTrail = () => {
               key={items[index]}
               style={{
                 ...rest,
-                height: 30,
+                height: itemHeight,
                 transform: x.interpolate(x => `translate3d(0,${x}px,0)`),
               }}
             >
