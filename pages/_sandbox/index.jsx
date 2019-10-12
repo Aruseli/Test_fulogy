@@ -33,9 +33,14 @@ export default () => (
         <div>graph</div>
       </a>
     </Link>
-    <Link href="/_sandbox/react-spring">
+    <Link href="/_sandbox/react-spring-scroll">
       <a>
-        <div>react-spring</div>
+        <div>react-spring-scroll</div>
+      </a>
+    </Link>
+    <Link href="/_sandbox/react-spring-sensor">
+      <a>
+        <div>react-spring-sensor</div>
       </a>
     </Link>
   </div>
