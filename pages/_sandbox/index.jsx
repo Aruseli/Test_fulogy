@@ -48,5 +48,10 @@ export default () => (
         <div>react-spring-sensor-trail</div>
       </a>
     </Link>
+    <Link href="/_sandbox/image-size-sensor">
+      <a>
+        <div>image-size-sensor</div>
+      </a>
+    </Link>
   </div>
 );
