@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import ReactResizeDetector from 'react-resize-detector';
 
-export const ImageResponsiveSensor = ({ children, style, ...props }) => {
+export const ChildrenResponsive = ({ children, style, ...props }) => {
   const [sizeOut, setSizeOut] = useState({ width: 0, height: 0 });
   const [sizeIn, setSizeIn] = useState({ width: 0, height: 0 });
 

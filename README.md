@@ -132,3 +132,32 @@ export default wrapPage(() => {
 ## graphiql with explorer
 
 Example on `/_sandbox/graphiql`.
+
+## graph explorer
+
+Viewer based on nodes, links and props mutated data.
+
+## children-responsive
+
+- [x] js responsive for children
+- [ ] js move content based on mouse move
+
+```jsx
+import { ChildrenResponsive } from '../../imports/packages/children-responsive';
+
+// Picture
+<ChildrenResponsive>
+  <Picture images={ri.images} src={ri.src} />
+</ChildrenResponsive>
+
+// Or and markup
+<ChildrenResponsive>
+  <div style={{ display: 'inline-block' }}>inline-block</div>
+</ChildrenResponsive>
+```
+
+## reveals
+
+- [ ] spring simplified for visibility sensor
+- [ ] spring simplified for scroll
+- [ ] spring simplified for mouse
