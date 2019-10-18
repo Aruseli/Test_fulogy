@@ -6,6 +6,7 @@ import { useTheme, Typography, Button } from '@material-ui/core';
 import { Picture } from '../../imports/packages/picture';
 import { wrapPage } from '../../imports/wrap-page';
 import _ from 'lodash';
+import Link from 'next/link';
 
 export default wrapPage(() => {
   useEffect(() => {
