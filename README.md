@@ -27,6 +27,7 @@ GIT_REPOSITORY=''
 GIT_USERNAME=''
 GIT_PASSWORD=''
 PORT=3000
+AUTH_GOOGLE=''
 ```
 
 Optional environment:
