@@ -29,6 +29,12 @@ GIT_PASSWORD=''
 PORT=3000
 ```
 
+Optional environment:
+
+```sh
+PATH_PREFIX='/my-repo'
+```
+
 ## proxy
 
 Edit `pages/api`.
