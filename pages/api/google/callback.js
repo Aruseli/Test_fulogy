@@ -48,7 +48,7 @@ passport.use(
 );
 
 app.get(
-  '/google/callback', 
+  '/api/google/callback', 
   passport.authenticate('google', {
     failureRedirect: process.env.GOOGLE_CALLBACK_REDIRECT,
   }),
