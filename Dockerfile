@@ -1,10 +1,9 @@
 FROM node:lts
 
-# Copy the application to the Docker image
-ADD ./ /opt/repository
-WORKDIR /opt/repository
+COPY [".", "/usr/src/app"]
+WORKDIR "/usr/src/app"
 
 RUN npm install
 RUN npm build
 
-CMD ["npm", "start", "--", "-p", "$PORT"]
+CMD ["npm", "start"]
