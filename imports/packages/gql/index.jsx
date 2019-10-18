@@ -1,11 +1,8 @@
-import withApollo from 'next-with-apollo';
-import fetch from 'node-fetch';
-import { InMemoryCache, HttpLink } from 'apollo-boost';
+import { HttpLink, InMemoryCache } from 'apollo-boost';
 import ApolloClient from 'apollo-client';
+import { ApolloLink, concat, split } from 'apollo-link';
 import { WebSocketLink } from 'apollo-link-ws';
-import { split, ApolloLink, concat } from 'apollo-link';
-import { getDataFromTree } from '@apollo/react-ssr';
-import { ApolloProvider } from '@apollo/react-hooks';
+import fetch from 'node-fetch';
 
 export function generateHeaders(options) {
   const headers = {
