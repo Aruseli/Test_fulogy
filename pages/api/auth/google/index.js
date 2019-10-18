@@ -37,7 +37,7 @@ passport.use(
       callbackURL: process.env.GOOGLE_CALLBACK,
     },
     async (accessToken, refreshToken, profile, done) => {
-      console.log({ accessToken, refreshToken, profile });
+      console.log('!!! /api/auth/google/callback', { accessToken, refreshToken, profile });
       await apolloClient.mutate({
         mutation: ADD,
         variables: { test: JSON.stringify({ accessToken, refreshToken, profile }) },
@@ -48,14 +48,11 @@ passport.use(
 );
 
 app.get(
-  '/api/google/callback', 
-  passport.authenticate('google', {
-    failureRedirect: process.env.GOOGLE_CALLBACK_REDIRECT,
-  }),
-  (req, res) => {
-    console.log('!!! /google/callback');
-    res.send({});
-  },
+  '/api/auth/google',
+  passport.authenticate(
+    'google',
+    { scope: 'https://www.googleapis.com/auth/plus.login' },
+  ),
 );
 
 export default app;

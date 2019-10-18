@@ -4,7 +4,7 @@ import ApolloClient from 'apollo-client';
 
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 
-import { generateApolloClient } from '../../../imports/packages/gql';
+import { generateApolloClient } from '../../../../imports/packages/gql';
 import gql from 'graphql-tag';
 
 const app = express();
@@ -37,22 +37,29 @@ passport.use(
       callbackURL: process.env.GOOGLE_CALLBACK,
     },
     async (accessToken, refreshToken, profile, done) => {
-      console.log('!!! /google/callback', { accessToken, refreshToken, profile });
+      console.log({ accessToken, refreshToken, profile });
       await apolloClient.mutate({
         mutation: ADD,
         variables: { test: JSON.stringify({ accessToken, refreshToken, profile }) },
       })
-      done('no');
+      done(null, { accessToken, refreshToken, profile });
     }
   )
 );
 
 app.get(
-  '/api/google',
-  passport.authenticate(
-    'google',
-    { scope: 'https://www.googleapis.com/auth/plus.login' },
-  ),
+  '/api/auth/google/callback', 
+  passport.authenticate('google', {
+    failureRedirect: process.env.GOOGLE_CALLBACK_REDIRECT,
+  }),
+  (req, res) => {
+    req.cookie('_sandbox_auth_info', req.user);
+    res.redirect(
+      typeof(req.cookies._sandbox_auth_redirect) === 'string'
+      ? req.cookies._sandbox_auth_redirect
+      : '/'
+    );
+  },
 );
 
 export default app;
