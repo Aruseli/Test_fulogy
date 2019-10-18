@@ -4,7 +4,7 @@ import ApolloClient from 'apollo-client';
 
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 
-import { generateApolloClient } from '../../../imports/packages/gql';
+import { generateApolloClient } from '../../../../imports/packages/gql';
 import gql from 'graphql-tag';
 
 const app = express();
