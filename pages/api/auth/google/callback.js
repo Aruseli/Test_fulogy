@@ -62,7 +62,7 @@ app.get(
   '/api/auth/google/callback', 
   passport.authenticate('google'),
   (req, res) => {
-    req.cookie('_sandbox_auth_info', req.user);
+    res.cookie('_sandbox_auth_info', req.user);
     res.redirect(
       typeof(req.cookies._sandbox_auth_redirect) === 'string'
       ? req.cookies._sandbox_auth_redirect
