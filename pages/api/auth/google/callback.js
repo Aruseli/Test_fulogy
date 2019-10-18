@@ -14,6 +14,17 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  done(null, { id });
+  // User.findById(id, function(err, user) {
+  //   done(err, user);
+  // });
+});
+
 const ADD = gql`
   mutation AddTestSandbox($test: String) {
     insert__sandbox(objects: { test: $test }) {
@@ -42,16 +53,14 @@ passport.use(
         mutation: ADD,
         variables: { test: JSON.stringify({ accessToken, refreshToken, profile }) },
       })
-      done(null, { accessToken, refreshToken, profile });
+      done(null, profile);
     }
   )
 );
 
 app.get(
   '/api/auth/google/callback', 
-  passport.authenticate('google', {
-    failureRedirect: process.env.GOOGLE_CALLBACK_REDIRECT,
-  }),
+  passport.authenticate('google'),
   (req, res) => {
     req.cookie('_sandbox_auth_info', req.user);
     res.redirect(
