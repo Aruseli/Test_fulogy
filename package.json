@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "repository": "ivansglazunov/sandbox",
   "scripts": {
-    "dev": "next",
+    "dev": "next -p $PORT",
     "build": "next build",
     "start": "next start -p $PORT",
     "export": "next export"

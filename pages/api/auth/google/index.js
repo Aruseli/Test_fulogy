@@ -6,6 +6,6 @@ var proxyServer = proxy.createProxyServer({
 
 export default (req, res) => {
   proxyServer.web(req, res, {
-    target: `http://localhost:${process.env.PORT}/api/json`
+    target: `https://isg-sandbox-passportjs.herokuapp.com/google`
   });
 };

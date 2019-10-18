@@ -6,7 +6,7 @@
 git clone url sandbox
 cd sandbox
 npm i
-npm run dev
+PORT=3000 npm run dev
 ```
 
 ## env
