@@ -53,5 +53,10 @@ export default () => (
         <div>children-responsive</div>
       </a>
     </Link>
+    <Link href="/_sandbox/auth">
+      <a>
+        <div>auth</div>
+      </a>
+    </Link>
   </div>
 );
