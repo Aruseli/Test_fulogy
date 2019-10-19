@@ -1,0 +1,21 @@
+import { selectNodeIdByString } from "./gql";
+
+export const initPassportSessions = (passport, apolloClient) => {
+  passport.serializeUser((auth, done) => {
+    done(null, auth.token);
+  });
+
+  passport.deserializeUser((token, done) => {
+    try {
+      const nodeId = await selectNodeIdByString({
+        apolloClient,
+        format: 'txt',
+        type: 'auth_token',
+        value: token,
+      })
+      done(null, { token, nodeId });
+    } catch(error) {
+      done(error);
+    }
+  });
+};

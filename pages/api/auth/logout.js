@@ -1,6 +1,6 @@
 import { initExpress } from '../../../../imports/packages/auth/express';
-import { initAuthGoogle } from '../../../../imports/packages/auth/google';
 import { generateApolloClient } from '../../../../imports/packages/gql';
+import { initAuthLogout } from '../../../imports/packages/auth/logout';
 
 const app = initExpress();
 
@@ -9,7 +9,6 @@ const apolloClient = generateApolloClient({}, {
   secret: process.env.GQL_SECRET,
 });
 
-initAuthGoogleStrategy(app, apolloClient);
-initAuthGoogle('/api/auth/google', app, apolloClient);
+initAuthLogout('/api/auth/logout', app, apolloClient);
 
 export default app;
