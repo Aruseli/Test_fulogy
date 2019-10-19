@@ -5,7 +5,7 @@ import uniqid from 'uniqid';
 // select node by some string
 
 export const SELECT_NODE_ID_BY_STRING = gql`
-query SELECT_NODE_BY_STRING($format: String, $type: String, $value: String) {
+query SELECT_NODE_ID_BY_STRING($format: String, $type: String, $value: String) {
   nodes(where: {nodes_props_strings: {format: {_eq: $format}, type: {_eq: $type}, value: {_eq: $value}}}) {
     id
   }
@@ -16,7 +16,7 @@ export const selectNodeIdByString = async ({
   apolloClient, format, type, value,
 }) => {
   const r0 = await apolloClient.query({
-    query: SELECT_NODE_BY_STRING,
+    query: SELECT_NODE_ID_BY_STRING,
     variables: { format, type, value, },
   });
   return _.get(r0, 'data.nodes.0.id');
