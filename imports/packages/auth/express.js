@@ -11,7 +11,7 @@ export const initExpress = (apolloClient) => {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  initPassportSessions(apolloClient);
+  initPassportSessions(passport, apolloClient);
 
   return app;
 };
