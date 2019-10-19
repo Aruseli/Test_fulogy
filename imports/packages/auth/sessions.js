@@ -5,7 +5,7 @@ export const initPassportSessions = (passport, apolloClient) => {
     done(null, auth.token);
   });
 
-  passport.deserializeUser((token, done) => {
+  passport.deserializeUser(async (token, done) => {
     try {
       const nodeId = await selectNodeIdByString({
         apolloClient,
