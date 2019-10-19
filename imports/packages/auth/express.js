@@ -3,7 +3,7 @@ import passport from 'passport';
 
 import { initPassportSessions } from './sessions';
 
-export const initExpress = () => {
+export const initExpress = (apolloClient) => {
   const app = express();
   
   app.set('json spaces', 2); // number of spaces for indentation
