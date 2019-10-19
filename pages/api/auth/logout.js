@@ -1,5 +1,5 @@
-import { initExpress } from '../../../../imports/packages/auth/express';
-import { generateApolloClient } from '../../../../imports/packages/gql';
+import { initExpress } from '../../../imports/packages/auth/express';
+import { generateApolloClient } from '../../../imports/packages/gql';
 import { initAuthLogout } from '../../../imports/packages/auth/logout';
 
 const app = initExpress();
