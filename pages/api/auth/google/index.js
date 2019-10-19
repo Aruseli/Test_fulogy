@@ -1,5 +1,5 @@
 import { initExpress } from '../../../../imports/packages/auth/express';
-import { initAuthGoogle } from '../../../../imports/packages/auth/google';
+import { initAuthGoogle, initAuthGoogleStrategy } from '../../../../imports/packages/auth/google';
 import { generateApolloClient } from '../../../../imports/packages/gql';
 
 const apolloClient = generateApolloClient({}, {
