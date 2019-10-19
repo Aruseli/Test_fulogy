@@ -6,7 +6,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({
   context = AuthContext,
-}) => {
+} = {}) => {
   let _sandbox_auth_info = Cookies.get('_sandbox_auth_info');
 
   if (_sandbox_auth_info) {
@@ -20,14 +20,14 @@ export const AuthProvider = ({
 
 export function useAuth({
   context = AuthContext,
-}) {
+} = {}) {
   return useContext(context);
 };
 
 export const fakeRouter = {};
 export function useAuthRedirect({
   url = null,
-}) {
+} = {}) {
   const router = useRouter();
   const { pathname } = process.browser && router ? router : { pathname: url };
 
