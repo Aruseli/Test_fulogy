@@ -7,15 +7,17 @@ import { Picture } from '../../imports/packages/picture';
 import { wrapPage } from '../../imports/wrap-page';
 import _ from 'lodash';
 import Link from 'next/link';
+import { useAuth } from '../../imports/packages/auth/react';
 
 export default wrapPage(() => {
-  useEffect(() => {
-    Cookies.set('_sandbox_auth_redirect', '/_sandbox/auth');
-  }, []);
-
+  const { _sandbox_auth_info } = useAuth();
   return (
     <>
       <div>
+        <pre>
+        _sandbox_auth_info: {JSON.stringify(_sandbox_auth_info, null, 2)}
+        </pre>
+        <hr/>
         <div>
           <Link href="/api/auth/google"><a>/api/auth/google</a></Link>
         </div>
@@ -27,6 +29,10 @@ export default wrapPage(() => {
         </div>
         <div>
           <Link href="/api/auth/ok"><a>/api/auth/ok</a></Link>
+        </div>
+        <hr/>
+        <div>
+          <Link href="/api/auth/logout"><a>/api/auth/logout</a></Link>
         </div>
       </div>
     </>

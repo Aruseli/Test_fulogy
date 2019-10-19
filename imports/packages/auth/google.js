@@ -41,11 +41,8 @@ export const initAuthGoogleCallback = (path, app, apolloClient) => {
     passport.authenticate('google'),
     (req, res) => {
       res.cookie('_sandbox_auth_info', req.user);
-      res.redirect(
-        typeof(req.cookies._sandbox_auth_redirect) === 'string'
-        ? req.cookies._sandbox_auth_redirect
-        : '/'
-      );
+      const url = _.get(req, 'cookies._sandbox_auth_redirect');
+      res.redirect(url || '/');
     },
   );
 };
