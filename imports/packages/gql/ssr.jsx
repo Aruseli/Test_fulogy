@@ -1,4 +1,8 @@
+// @flow
+
 import React from 'react';
+
+import ApolloClient from 'apollo-client';
 
 import { getDataFromTree } from '@apollo/react-ssr';
 
@@ -14,8 +18,12 @@ import { generateApolloClient } from './';
  * @param {string=} options.gqlPath
  * @returns {function} WrappedComponent
  */
-export const wrapSsrGql = ({ Component: Content, gqlSecret, gqlPath }) => {
-  const Component = ({ apolloClient }) => {
+export const wrapSsrGql = ({
+  Component: Content, gqlSecret, gqlPath,
+}: {
+  Component: any; gqlSecret?: string; gqlPath?: string;
+}) => {
+  const Component = ({ apolloClient }: { apolloClient: ApolloClient }) => {
     return (
       <ApolloProvider client={apolloClient}>
         <Content />
@@ -23,7 +31,7 @@ export const wrapSsrGql = ({ Component: Content, gqlSecret, gqlPath }) => {
     );
   };
 
-  const Page = ({ apolloState, token }) => {
+  const Page = ({ apolloState, token }: { apolloState: any; token: string | void }) => {
     const apolloClient = generateApolloClient(apolloState, {
       token,
       secret: gqlSecret,
@@ -38,7 +46,7 @@ export const wrapSsrGql = ({ Component: Content, gqlSecret, gqlPath }) => {
     if (Content.getInitialProps) await Content.getInitialProps(props);
 
     const { req } = props;
-    const token = req && req.cookies ? req.cookies.token : undefined;
+    const token: string | void = req && req.cookies ? req.cookies.token : undefined;
     const apolloClient = generateApolloClient(
       {},
       {
@@ -50,7 +58,7 @@ export const wrapSsrGql = ({ Component: Content, gqlSecret, gqlPath }) => {
     await getDataFromTree(
       <Component apolloClient={apolloClient} token={token} />,
     );
-    const apolloState = apolloClient.extract();
+    const apolloState: any = apolloClient.extract();
     apolloClient.stop();
     return { apolloState, token };
   };

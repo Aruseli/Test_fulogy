@@ -1,3 +1,5 @@
+// @flow
+
 import React, { useState, useContext } from 'react';
 
 import { useTheme, Typography, makeStyles } from '@material-ui/core';
@@ -6,6 +8,7 @@ import { ChildrenResponsive } from '../../imports/packages/children-responsive';
 import { wrapPage } from '../../imports/wrap-page';
 import _ from 'lodash';
 
+// $flowignore
 const ri = require('../../images/sandbox.jpg?sizes[]=1800,sizes[]=1280,sizes[]=960,sizes[]=600,sizes[]=300,sizes[]=100');
 
 const useStyle = makeStyles(() => ({
@@ -48,11 +51,7 @@ export default wrapPage(() => {
           }}
           >
           <ChildrenResponsive>
-            <div
-              style={{ display: 'inline-block' }}
-            >
-              inline-block
-            </div>
+            <div style={{ display: 'inline-block' }}>inline-block</div>
           </ChildrenResponsive>
         </div>
       </div>

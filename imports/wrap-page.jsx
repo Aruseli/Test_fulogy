@@ -12,7 +12,9 @@ import { AuthProvider, useAuthRedirect } from './packages/auth/react';
  * @param {function} Component
  * @returns {function} WrappedComponent
  */
+
 export const wrapPage = Component => {
+  // TODO add gqlToken
   return wrapSsrGql({
     gqlPath: process.env.GQL_PATH,
     gqlSecret: process.env.GQL_SECRET,

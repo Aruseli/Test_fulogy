@@ -1,3 +1,5 @@
+// @flow
+
 import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
 
@@ -128,8 +130,8 @@ export default wrapPage(() => {
   };
   const [viewMode, setViewMode] = useState('3d');
 
-  const [selected, setSelected] = useState(null);
-  const [linking, setLinking] = useState(null);
+  const [selected, setSelected] = useState<any>(null);
+  const [linking, setLinking] = useState<any>();
 
   const [addRootNode] = useMutation(ADD_ROOT_NODE, {
     onCompleted: () => enqueueSnackbar('ADD_ROOT_NODE completed'),
@@ -189,6 +191,7 @@ export default wrapPage(() => {
     insertLink({
       variables: {
         sourceId: selected.id,
+        // $flowignore
         targetId: linking.id,
       },
     });
@@ -283,6 +286,7 @@ export default wrapPage(() => {
           left: 0, top: 48,
           overflow: 'hidden',
           width: '100%',
+          // $flowignore
           height: topPanelSize.size,
           ...(
             topPanelValue

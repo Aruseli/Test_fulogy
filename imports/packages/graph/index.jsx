@@ -1,3 +1,5 @@
+// @flow
+
 import React, { useState, useEffect } from 'react';
 
 import _ from 'lodash';
@@ -7,7 +9,7 @@ import { useParsed } from './parse';
 import { Paper, List, ListItem } from "@material-ui/core";
 
 let ForceGraph2D, ForceGraph3D, SpriteText;
-if (process.browser) {
+if (_.get(process, 'browser')) {
   SpriteText = require('three-spritetext').default;
   ForceGraph2D = require('react-force-graph-2d').default;
   ForceGraph3D = require('react-force-graph-3d').default;
@@ -19,7 +21,13 @@ export const Graph = ({
   type = '2d',
   onNodeClick,
   generateWidth = (width) => width,
-  ...props,
+  ...props
+}: {
+  nodes: any[];
+  links: any[];
+  type?: string;
+  onNodeClick: (node: any) => void;
+  generateWidth: (width: number) => number;
 }) => {
   const [{ width, height }, setSize] = useState({ width: 100, height: 100 });
 
@@ -28,10 +36,10 @@ export const Graph = ({
   };
 
   return <div style={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', overflow: 'hidden' }}>
-    <ReactResizeDetector handleWidth handleHeight onResize={(width, height) => {
+    <ReactResizeDetector handleWidth handleHeight onResize={(width: number, height: number) => {
       setSize({ width, height });
     }}/>
-    {type === '3d' && process.browser && <>
+    {type === '3d' && _.get(process, 'browser') && <>
       <ForceGraph3D
         width={generateWidth(width)}
         height={height}
@@ -57,7 +65,7 @@ export const Graph = ({
         {...props}
       />
     </>}
-    {type === '2d' && process.browser && <>
+    {type === '2d' && _.get(process, 'browser') && <>
       <ForceGraph2D
         width={width}
         height={height}
@@ -70,7 +78,7 @@ export const Graph = ({
         linkDirectionalArrowRelPos={1}
         linkCurvature={0.25}
         linkColor={d => d.color}
-        nodeCanvasObject={(node, ctx, globalScale) => {
+        nodeCanvasObject={(node: any, ctx: any, globalScale: number) => {
           const label = node.label || node.id;
           const fontSize = 12/globalScale;
           ctx.font = `${fontSize}px Sans-Serif`;

@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "repository": "ivansglazunov/sandbox",
   "scripts": {
+    "flow": "flow",
     "dev": "next -p $PORT",
     "build": "next build",
     "start": "next start -p $PORT",
@@ -71,5 +72,11 @@
   },
   "license": "ISC",
   "keywords": [],
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
+    "@babel/preset-flow": "^7.0.0",
+    "flow-bin": "^0.109.0"
+  }
 }

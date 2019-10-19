@@ -1,10 +1,14 @@
+// @flow
+
+import _ from 'lodash';
+
 import { initExpress } from '../../../../imports/packages/auth/express';
 import { initAuthGoogle, initAuthGoogleStrategy } from '../../../../imports/packages/auth/google';
 import { generateApolloClient } from '../../../../imports/packages/gql';
 
 const apolloClient = generateApolloClient({}, {
-  path: process.env.GQL_PATH,
-  secret: process.env.GQL_SECRET,
+  path: _.get(process, 'env.GQL_PATH'),
+  secret: _.get(process, 'env.GQL_SECRET'),
 });
 
 const app = initExpress(apolloClient);

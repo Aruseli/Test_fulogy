@@ -1,16 +1,20 @@
+// @flow
+
 import Gql from 'graphql-tag';
 import { useQuery as _useQuery, useSubscription as _useSubscription, useMutation as _useMutation, useApolloClient as _useApolloClient } from '@apollo/react-hooks';
 import _ from 'lodash';
 
-export function useQuery(query, ...args) {
+// TODO ...args to gql options
+
+export function useQuery(query: string, ...args: any[]) {
   return _useQuery(toGql(query), ...args);
 };
 
-export function useSubscription(query, ...args) {
+export function useSubscription(query: string, ...args: any[]) {
   return _useSubscription(toGql(query), ...args);
 };
 
-export function useMutation(query, ...args) {
+export function useMutation(query: string, ...args: any[]) {
   return _useMutation(toGql(query), ...args);
 };
 
@@ -34,7 +38,7 @@ export const toGqls = _.memoize(queryString => {
  * @param {*} options - useQuery and useSubscription options
  * @return {UseGraphqlResult} result
  */
-export function useGql(queryString, options = {}) {
+export function useGql(queryString: string, options: any = {}) {
   const { query, subscription } = toGqls(queryString);
 
   const qr = useQuery(query, { ssr: true, ...options });
@@ -45,10 +49,10 @@ export function useGql(queryString, options = {}) {
   return { data: sr.data, loading: sr.loading, error: sr.error };
 }
 
-export function gql(strings) {
+export function gql(strings: any) {
   return strings[0];
 }
 
-export const toGql = _.memoize((string) => {
+export const toGql = _.memoize((string: string) => {
   return Gql`${string}`;
 });

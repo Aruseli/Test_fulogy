@@ -1,3 +1,5 @@
+// @flow
+
 import React, { useContext, useCallback } from 'react';
 
 import { useTheme, Typography, Grid } from '@material-ui/core';

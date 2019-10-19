@@ -1,6 +1,8 @@
+// @flow
+
 import { selectNodeIdByString } from "./gql";
 
-export const initPassportSessions = (passport, apolloClient) => {
+export const initPassportSessions = (passport: any, apolloClient: any) => {
   passport.serializeUser((auth, done) => {
     done(null, auth.token);
   });

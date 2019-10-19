@@ -1,3 +1,5 @@
+// @flow
+
 import React, { useContext } from 'react';
 
 import { useTheme } from '@material-ui/core';
@@ -15,7 +17,13 @@ import _ from 'lodash';
  * @param {number} props.images.$.width
  * @param {number} props.images.$.height
  */
-export const Picture = ({ images, src, ...props }) => {
+export const Picture = ({
+  images, src, ...props
+}: {
+  images: { path: string; width: number; height: number; type?: string; }[];
+  src: string;
+  [string]: any;
+}) => {
   return (
     <picture>
       {images.map((image, i) => {

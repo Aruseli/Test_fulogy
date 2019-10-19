@@ -1,9 +1,15 @@
+// @flow
+
+import _ from 'lodash';
 import passport from 'passport';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 import gql from 'graphql-tag';
+
+import ApolloClient from 'apollo-client';
+
 import { define_node_with_google_id_return_new_auth_token } from './gql';
 
-export const initAuthGoogleStrategy = (app, apolloClient) => {
+export const initAuthGoogleStrategy = (app: any, apolloClient: any) => {
   passport.use(
     new GoogleStrategy(
       {
@@ -25,7 +31,7 @@ export const initAuthGoogleStrategy = (app, apolloClient) => {
   );
 };
 
-export const initAuthGoogle = (path, app, apolloClient) => {
+export const initAuthGoogle = (path: string, app: any, apolloClient: any) => {
   app.get(
     path,
     passport.authenticate(
@@ -35,7 +41,7 @@ export const initAuthGoogle = (path, app, apolloClient) => {
   );
 };
 
-export const initAuthGoogleCallback = (path, app, apolloClient) => {
+export const initAuthGoogleCallback = (path: string, app: any, apolloClient: any) => {
   app.get(
     path, 
     passport.authenticate('google'),

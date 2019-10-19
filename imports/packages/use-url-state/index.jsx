@@ -1,3 +1,5 @@
+// @flow
+
 import { useRouter } from 'next/router';
 
 export const fakeRouter = {};
@@ -10,14 +12,14 @@ export const fakeRouter = {};
  * @param {*} defaultValue
  * @returns {object} result - [value, setValue] as `useState`
  */
-export function useUrlState(name, defaultValue) {
+export function useUrlState(name: string, defaultValue: any) {
   const router = useRouter();
   
   const { query, pathname, push } = router || fakeRouter;
 
   const result = [
     query && query[name] ? JSON.parse(String(query[name])) : defaultValue,
-    value => {
+    (value: any) => {
       push({
         pathname,
         query: {

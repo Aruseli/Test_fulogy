@@ -1,10 +1,13 @@
+// @flow
+
+import _ from 'lodash';
 import { HttpLink, InMemoryCache } from 'apollo-boost';
 import ApolloClient from 'apollo-client';
 import { ApolloLink, concat, split } from 'apollo-link';
 import { WebSocketLink } from 'apollo-link-ws';
 import fetch from 'node-fetch';
 
-export function generateHeaders(options) {
+export function generateHeaders(options: IOptions) {
   const headers = {
     ...(options.secret
       ? {
@@ -19,6 +22,13 @@ export function generateHeaders(options) {
   };
   return headers;
 };
+
+interface IOptions {
+  secret?: string | void;
+  token?: string | void;
+  headers?: { [string]: any };
+  path?: string | void;
+}
 
 // TODO token and secret
 
@@ -35,19 +45,22 @@ export function generateHeaders(options) {
  * @param {string} options.path
  * @returns {ApolloClient} ApolloClient
  */
-export function generateApolloClient(initialState = {}, options = {}) {
+export function generateApolloClient(
+  initialState: any = {},
+  options: IOptions = {},
+): ApolloClient {
   const headers = generateHeaders(options);
 
   const httpLink = new HttpLink({
-    uri: `https://${options.path}`,
+    uri: `https://${options.path || ''}`,
     fetch,
   });
 
   // @ts-ignore
-  const wsLink = !process.browser
+  const wsLink = !_.get(process, 'browser')
     ? null
     : new WebSocketLink({
-        uri: `wss://${options.path}`,
+        uri: `wss://${options.path || ''}`,
         options: {
           lazy: true,
           reconnect: true,
@@ -66,7 +79,7 @@ export function generateApolloClient(initialState = {}, options = {}) {
   });
 
   // @ts-ignore
-  const link = !process.browser
+  const link = !_.get(process, 'browser')
     ? httpLink
     : split(
         ({ query }) => {

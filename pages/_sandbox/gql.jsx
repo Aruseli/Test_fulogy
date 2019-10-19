@@ -1,3 +1,5 @@
+// @flow
+
 import React from 'react';
 
 import { wrapPage } from '../../imports/wrap-page';

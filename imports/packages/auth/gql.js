@@ -1,3 +1,5 @@
+// @flow
+
 import _ from 'lodash';
 import gql from "graphql-tag";
 import uniqid from 'uniqid';
@@ -14,6 +16,8 @@ query SELECT_NODE_ID_BY_STRING($format: String, $type: String, $value: String) {
 
 export const selectNodeIdByString = async ({
   apolloClient, format, type, value,
+}: {
+  apolloClient: any, format: string, type: string, value: string,
 }) => {
   const r0 = await apolloClient.query({
     query: SELECT_NODE_ID_BY_STRING,
@@ -35,7 +39,9 @@ mutation INSERT_STRING_TO_NODE($format: String, $type: String, $value: String, $
 `;
 
 export const insertStringToNode = ({
-  apolloClient, format, type, value, nodeId
+  apolloClient, format, type, value, nodeId,
+}: {
+  apolloClient: any, format: string, type: string, value: string, nodeId: string
 }) => apolloClient.mutate({
   mutation: INSERT_STRING_TO_NODE,
   variables: { format, type, value, nodeId },
@@ -45,6 +51,8 @@ export const insertStringToNode = ({
 
 export const selectNodeIdByAuthGoogleId = ({
   apolloClient, googleId,
+}: {
+  apolloClient: any; googleId: string;
 }) => selectNodeIdByString({
   apolloClient,
   format: 'txt',
@@ -56,6 +64,8 @@ export const selectNodeIdByAuthGoogleId = ({
 
 export const define_node_with_google_id_return_new_auth_token = async ({
   apolloClient, googleId
+}: {
+  apolloClient: any; googleId: string;
 }) => {
   const nodeId = await selectNodeIdByAuthGoogleId({ apolloClient, googleId });
   if (!nodeId) {
@@ -97,6 +107,8 @@ mutation INSERT_NODE_WITH_AUTH_GOOGLE_ID($googleId: String, $nodeId: String, $to
 
 export const insertNodeWithAuthGoogleIdAndToken = async({
   apolloClient, googleId, nodeId = uniqid(), token = uniqid(),
+}: {
+  apolloClient: any; googleId: string; nodeId?: string; token?: string;
 }) => {
   await apolloClient.mutate({
     mutation: INSERT_NODE_WITH_AUTH_GOOGLE_ID_AND_TOKEN,

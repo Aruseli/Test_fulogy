@@ -1,3 +1,5 @@
+// @flow
+
 import React, { useContext } from 'react';
 
 import { useTheme, Typography } from '@material-ui/core';
@@ -5,6 +7,7 @@ import { Picture } from '../../imports/packages/picture';
 import { wrapPage } from '../../imports/wrap-page';
 import _ from 'lodash';
 
+// $flowignore
 const ri = require('../../images/sandbox.jpg?sizes[]=1800,sizes[]=1280,sizes[]=960,sizes[]=600,sizes[]=300,sizes[]=100');
 
 export default wrapPage(() => {

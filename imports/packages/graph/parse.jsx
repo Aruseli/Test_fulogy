@@ -1,10 +1,54 @@
+// @flow
+
 import React from 'react';
 import { useState } from 'react';
 import color from 'material-color-hash';
 
 import _ from 'lodash';
 
-const parseLink = (input, links, _road, nodes) => {
+interface IDataLink {
+  [string]: any;
+  __typename: string;
+  id: number;
+  source_id: string;
+  target_id: string;
+  node_id: string;
+}
+
+interface IDataNode {
+  [string]: any;
+  __typename: string;
+  id: string;
+  links_indexes_by_list_node: {
+    __typename: string;
+    id: number;
+    list_node_id: string;
+    depth: number;
+  }[]
+}
+
+interface IViewLink {
+  id: string;
+  source: string;
+  target: string;
+  group: string;
+  color: string;
+  __data: any;
+}
+
+interface IViewNode {
+  id: string;
+  group: string;
+  color: string;
+  __data: any;
+}
+
+const parseLink = (
+  input: IDataLink[],
+  links: { [string]: IViewLink },
+  _road: any,
+  nodes: { [string]: IViewNode },
+) => {
   if (!_.size(input)) return;
   for (let i = 0; i < input.length; i++) {
     const link = input[i];
@@ -50,7 +94,13 @@ const parseLink = (input, links, _road, nodes) => {
   }
 };
 
-const parseProp = (node, rel, links, _road, nodes) => {
+const parseProp = (
+  node: IDataNode,
+  rel: string,
+  links: { [string]: IViewLink },
+  _road: any,
+  nodes: { [string]: IViewNode },
+) => {
   if (!_.size(node[rel])) return;
   for (let p = 0; p < node[rel].length; p++) {
     const pr = node[rel][p];
@@ -71,7 +121,12 @@ const parseProp = (node, rel, links, _road, nodes) => {
   }
 };
 
-const parseIndex = (node, links, _road, nodes) => {
+const parseIndex = (
+  node: IDataNode,
+  links: { [string]: IViewLink },
+  _road: any,
+  nodes: { [string]: IViewNode }
+) => {
   if (!_.size(node.links_indexes_by_list_node)) return;
   for (let it = 0; it < node.links_indexes_by_list_node.length; it++) {
     const index = node.links_indexes_by_list_node[it];
@@ -97,8 +152,8 @@ const parseIndex = (node, links, _road, nodes) => {
 };
 
 export const hashIntoResult = (
-  hash = {},
-  result = [],
+  hash: any = {},
+  result: any = [],
 ) => {
   for (let k = 0; k < result.length; k++) {
     if (hash[result[k].id]) {
@@ -120,8 +175,8 @@ export const hashIntoResult = (
 };
 
 export const onlyChanged = (
-  results = { nodes: [], links: [] },
-  hashs,
+  results: { nodes: IViewNode[]; links: IViewLink[] } = { nodes: [], links: [] },
+  hashs: any,
 ) => {
   const _nodes = hashIntoResult(hashs.nodes, results.nodes);
   results.nodes = _nodes;
@@ -134,8 +189,10 @@ export const onlyChanged = (
 };
 
 export function parseNode(
-  node,
-  nodes, links, _road,
+  node: any,
+  nodes: { [string]: IViewNode },
+  links: { [string]: IViewLink },
+  _road: any,
 ) {
   nodes[`n${node.id}`] = {
     id: `n${node.id}`,
@@ -154,8 +211,8 @@ export function parseNode(
 };
 
 export function useParsed(
-  data,
-  results = { nodes: [], links: [] },
+  data: { nodes?: IDataNode[]; links?: IDataLink[]; },
+  results: { nodes: IViewNode[]; links: IViewLink[] } = { nodes: [], links: [] },
 ) {
   const nodes = {};
   const _road = {};

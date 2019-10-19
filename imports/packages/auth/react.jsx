@@ -1,11 +1,25 @@
-import { createContext, useCallback, useContext, useEffect } from "react";
+// @flow
+
+import React, { createContext, useCallback, useContext, useEffect } from "react";
+
 import Cookies from 'js-cookie';
 import { useRouter } from "next/router";
 
-export const AuthContext = createContext();
+interface IAuthContext {
+  _sandbox_auth_info?: {
+    token: string;
+    nodeId: string;
+  }
+}
+
+export const AuthContext = createContext<IAuthContext>({});
 
 export const AuthProvider = ({
   context = AuthContext,
+  children,
+}: {
+  context: React$Context<IAuthContext>;
+  children: any;
 } = {}) => {
   let _sandbox_auth_info = Cookies.get('_sandbox_auth_info');
 
@@ -15,21 +29,25 @@ export const AuthProvider = ({
 
   return <context.Provider value={{
     _sandbox_auth_info,
-  }}></context.Provider>;
+  }}>{children}</context.Provider>;
 };
 
 export function useAuth({
   context = AuthContext,
+}: {
+  context: React$Context<IAuthContext>;
 } = {}) {
   return useContext(context);
 };
 
 export const fakeRouter = {};
 export function useAuthRedirect({
-  url = null,
+  url,
+}: {
+  url?: string;
 } = {}) {
   const router = useRouter();
-  const { pathname } = process.browser && router ? router : { pathname: url };
+  const { pathname } = router || { pathname: url };
 
   useEffect(() => {
     Cookies.set('_sandbox_auth_redirect', pathname);

@@ -1,4 +1,7 @@
-import React, { useEffect } from 'react';
+// @flow
+
+import _ from 'lodash';
+import React, { useEffect, createContext } from 'react';
 import { useRouter } from 'next/router';
 
 import ReactPixel from 'react-facebook-pixel';
@@ -12,7 +15,14 @@ export const generateUserId = () => {
   return `${new Date().valueOf()}${chance.fbid()}`;
 };
 
-export const Context = React.createContext({});
+interface IAnaliticsContext {
+  facebookPixel?: string | number | null;
+  googleAnalitics?: string | number | null;
+  yandexMetrika?: string | number | null;
+  trigger?: (action: string, data: { [string]: any; value?: any; }) => void;
+}
+
+export const Context: React$Context<IAnaliticsContext> = createContext<IAnaliticsContext>({});
 
 /**
  *
@@ -29,6 +39,12 @@ export const AnaliticsProvider = ({
   yandexMetrika = null,
   context = Context,
   children,
+}: {
+  facebookPixel: string | number | null;
+  googleAnalitics: string | number | null;
+  yandexMetrika: string | number | null;
+  context: React$Context<IAnaliticsContext>;
+  children: any;
 }) => {
   const router = useRouter();
   const pathname = router ? router.pathname : null;
@@ -60,7 +76,7 @@ export const AnaliticsProvider = ({
   );
 
   useEffect(() => {
-    if (!process.browser || !pathname) return content;
+    if (!_.get(process, 'browser') || !pathname) return;
 
     if (!localStorage.getItem('_analiticsUserId')) {
       localStorage.setItem('_analiticsUserId', generateUserId());
@@ -84,7 +100,7 @@ export const AnaliticsProvider = ({
   }, []);
 
   useEffect(() => {
-    if (!process.browser || !pathname) return content;
+    if (!_.get(process, 'browser') || !pathname) return;
 
     if (facebookPixel) ReactPixel.pageView();
     if (googleAnalitics) {
@@ -93,7 +109,7 @@ export const AnaliticsProvider = ({
     }
   }, [pathname]);
 
-  if (!process.browser || !pathname) return content;
+  if (!_.get(process, 'browser') || !pathname) return content;
 
   return (
     <>

@@ -1,4 +1,8 @@
-export const initAuthLogout = (path, app, apolloClient) => {
+// @flow
+
+import _ from 'lodash';
+
+export const initAuthLogout = (path: string, app: any, apolloClient: any) => {
   app.get(path, (req, res) => {
     res.cookie('_sandbox_auth_info', '');
     req.logout();

@@ -1,4 +1,7 @@
+// @flow
+
 import React, { Component, createRef, useState, useEffect } from "react";
+import _ from 'lodash';
 import GraphiQL from "graphiql";
 import GraphiQLExplorer from "graphiql-explorer";
 import { buildClientSchema, getIntrospectionQuery, parse } from "graphql";
@@ -73,8 +76,15 @@ export default ({
   setExplorerIsOpen,
   fetcher,
   buttons,
+}: {
+  query: string;
+  setQuery: any;
+  explorerIsOpen: boolean;
+  setExplorerIsOpen: (exporerIsOpen: boolean) => void;
+  fetcher: any;
+  buttons?: any;
 }) => {
-  const _graphiql = createRef();
+  const _graphiql: any = createRef();
   const [schema, setSchema] = useState(null);
 
   useEffect(() => {
@@ -107,7 +117,7 @@ export default ({
       getDefaultScalarArgValue={getDefaultScalarArgValue}
       makeDefaultArg={makeDefaultArg}
     />
-    {!process.browser ? <></> : <GraphiQL
+    {!_.get(process, 'browser') ? <></> : <GraphiQL
       ref={_graphiql}
       fetcher={fetcher}
       schema={schema}

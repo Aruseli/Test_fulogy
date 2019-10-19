@@ -1,5 +1,16 @@
 # sandbox
 
+- [x] flow types
+- [x] api tested
+- [x] graphiql for out graph concept
+- [x] packages to separated publish
+  - [x] google/yandex/facebook analitis
+  - [x] gql ssr hybrid query/subscriptions
+  - [x] use-url-state
+  - [x] children-responsive
+  - [ ] nextjs-passportjs
+  - [ ] react-spring-reveals
+
 ## how
 
 ```sh
@@ -18,16 +29,22 @@ In process environment must be defined:
 ```sh
 GQL_SECRET='<x-hasura-admin-secret>'
 GQL_PATH='<gqlurl>'
-FB_TOKEN=0
+
+FB_TOKEN=''
 GA_TOKEN=''
-YM_TOKEN=0
+YM_TOKEN=''
+
 CONTAINER_NAME=''
 GIT_REGISTRY=''
 GIT_REPOSITORY=''
 GIT_USERNAME=''
 GIT_PASSWORD=''
+
 PORT=3000
-AUTH_GOOGLE=''
+
+GOOGLE_CLIENT_ID=""
+GOOGLE_CLIENT_SECRET=""
+GOOGLE_CALLBACK="https://<url>/api/auth/google/callback"
 ```
 
 Optional environment:
@@ -162,9 +179,3 @@ import { ChildrenResponsive } from '../../imports/packages/children-responsive';
   <div style={{ display: 'inline-block' }}>inline-block</div>
 </ChildrenResponsive>
 ```
-
-## reveals
-
-- [ ] spring simplified for visibility sensor
-- [ ] spring simplified for scroll
-- [ ] spring simplified for mouse

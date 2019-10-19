@@ -1,3 +1,5 @@
+// @flow
+
 import React, { useContext } from 'react';
 
 import { useUrlState } from '../../imports/packages/use-url-state';
