@@ -51,6 +51,11 @@ export default () => (
         <div>react-spring-sensor-trail</div>
       </a>
     </Link>
+    <Link href="/_sandbox/spring-reveals">
+      <a>
+        <div>spring-reveals</div>
+      </a>
+    </Link>
     <Link href="/_sandbox/children-responsive">
       <a>
         <div>children-responsive</div>
