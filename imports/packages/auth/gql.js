@@ -4,7 +4,7 @@ import _ from 'lodash';
 import gql from "graphql-tag";
 import uniqid from 'uniqid';
 
-// select node by some string
+// select node id by some string
 
 export const SELECT_NODE_ID_BY_STRING = gql`
 query SELECT_NODE_ID_BY_STRING($format: String, $type: String, $value: String) {
@@ -25,6 +25,31 @@ export const selectNodeIdByString = async ({
   });
   return _.get(r0, 'data.nodes.0.id');
 };
+
+// select node strings by some string
+
+export const SELECT_NODE_WITH_STRINGS_BY_STRING = gql`
+query SELECT_NODE_WITH_STRINGS_BY_STRING($format: String, $type: String, $value: String, $stringsWhere: nodes_props_strings_bool_exp) {
+  nodes(where: {nodes_props_strings: {format: {_eq: $format}, type: {_eq: $type}, value: {_eq: $value}}}) {
+    id
+    nodes_props_strings(where: $stringsWhere) {
+      id
+      type
+      format
+      value
+    }
+  }
+}
+`;
+
+export const selectNodeWithStringsByString = ({
+  apolloClient, format, type, value, stringsWhere
+}: {
+  apolloClient: any, format: string, type: string, value: string, stringsWhere: any
+}) => apolloClient.query({
+  query: SELECT_NODE_WITH_STRINGS_BY_STRING,
+  variables: { format, type, value, stringsWhere },
+});
 
 // insert string to node
 
@@ -90,6 +115,45 @@ export const define_node_with_google_id_return_new_auth_token = async ({
       nodeId,
     });
     return { nodeId, token };
+  }
+};
+
+// define node, upsert based on username/password and create new auth_token
+
+export const validate_and_define_node_with_username_and_password_return_new_auth_token = async ({
+  apolloClient, username, password
+}: {
+  apolloClient: any; username: string; password: string;
+}): {
+  nodeId?: string;
+  token?: string;
+  error?: string;
+} => {
+  const result = await selectNodeWithStringsByString({
+    apolloClient,
+    format: 'txt', type: 'auth_username', value: username,
+    stringsWhere: { format: { _eq: 'txt' }, type: { _eq: 'auth_password' } }
+  });
+  const node = _.get(result, 'data.nodes.0');
+  if (!node) return { error: 'node_lost' };
+  else {
+    const nPassword = _.get(node, 'nodes_props_strings.0.value');
+    if (!nPassword) return { error: 'password_lost' };
+    else if (nPassword !== password) return { error: 'password_wrong' };
+    else {
+      const token = uniqid();
+      await insertStringToNode({
+        apolloClient,
+        format: 'txt',
+        type: 'auth_token',
+        value: token,
+        nodeId: node.id,
+      });
+      return {
+        nodeId: node.id,
+        token,
+      };
+    }
   }
 };
 

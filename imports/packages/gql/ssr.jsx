@@ -5,10 +5,11 @@ import React from 'react';
 import ApolloClient from 'apollo-client';
 
 import { getDataFromTree } from '@apollo/react-ssr';
-
+import { parseCookies } from 'nookies'
 import { ApolloProvider } from '@apollo/react-hooks';
 
 import { generateApolloClient } from './';
+import { CookiesProvider } from '../cookies'
 
 /**
  * Wrap page for privide apolloClient and build server render based on nextjs async getInitialProps.
@@ -23,21 +24,23 @@ export const wrapSsrGql = ({
 }: {
   Component: any; gqlSecret?: string; gqlPath?: string;
 }) => {
-  const Component = ({ apolloClient }: { apolloClient: ApolloClient }) => {
+  const Component = ({ apolloClient, cookies }: { apolloClient: ApolloClient, cookies: any }) => {
     return (
-      <ApolloProvider client={apolloClient}>
-        <Content />
-      </ApolloProvider>
+      <CookiesProvider cookies={cookies}>
+        <ApolloProvider client={apolloClient}>
+          <Content />
+        </ApolloProvider>
+      </CookiesProvider>
     );
   };
 
-  const Page = ({ apolloState, token }: { apolloState: any; token: string | void }) => {
+  const Page = ({ apolloState, token, cookies }: { apolloState: any; token: string | void, cookies: any }) => {
     const apolloClient = generateApolloClient(apolloState, {
       token,
       secret: gqlSecret,
       path: gqlPath,
     });
-    const container = <Component apolloClient={apolloClient} token={token} />;
+    const container = <Component apolloClient={apolloClient} token={token} cookies={cookies}/>;
     apolloClient.stop();
     return container;
   };
@@ -45,8 +48,8 @@ export const wrapSsrGql = ({
   Page.getInitialProps = async props => {
     if (Content.getInitialProps) await Content.getInitialProps(props);
 
-    const { req } = props;
-    const token: string | void = req && req.cookies ? req.cookies.token : undefined;
+    const cookies = parseCookies(props);
+    const token: string | void = cookies.token || undefined;
     const apolloClient = generateApolloClient(
       {},
       {
@@ -56,11 +59,11 @@ export const wrapSsrGql = ({
       },
     );
     await getDataFromTree(
-      <Component apolloClient={apolloClient} token={token} />,
+      <Component apolloClient={apolloClient} token={token} cookies={cookies} />,
     );
     const apolloState: any = apolloClient.extract();
     apolloClient.stop();
-    return { apolloState, token };
+    return { apolloState, token, cookies };
   };
 
   return Page;

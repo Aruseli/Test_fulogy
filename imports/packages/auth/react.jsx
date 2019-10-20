@@ -4,15 +4,24 @@ import React, { createContext, useCallback, useContext, useEffect } from "react"
 
 import Cookies from 'js-cookie';
 import { useRouter } from "next/router";
+import useAxios from 'axios-hooks';
+import axios from 'axios';
+
+import { useCookies } from "../cookies";
 
 interface IAuthContext {
-  _sandbox_auth_info?: {
-    token: string;
-    nodeId: string;
-  }
+  auth_token?: string;
+  node_id?: string;
+  localLogin: (username: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
-export const AuthContext = createContext<IAuthContext>({});
+export const defaultAuthContext = {
+  localLogin: async (username: string, password: string) => {},
+  logout: async () => {},
+};
+
+export const AuthContext = createContext<IAuthContext>(defaultAuthContext);
 
 export const AuthProvider = ({
   context = AuthContext,
@@ -21,14 +30,34 @@ export const AuthProvider = ({
   context: React$Context<IAuthContext>;
   children: any;
 } = {}) => {
-  let _sandbox_auth_info = Cookies.get('_sandbox_auth_info');
+  const { cookies, setCookie } = useCookies();
 
-  if (_sandbox_auth_info) {
-    _sandbox_auth_info = JSON.parse(_sandbox_auth_info);
-  }
+  const auth_token = cookies._sandbox_auth_token;
+  const node_id = cookies._sandbox_auth_node_id;
+
+  const localLogin = async (username: string, password: string) => {
+    const result = await axios.get(`/api/auth/local?username=${username}&password=${password}`);
+    if (result.data && !result.data.error) {
+      setCookie('_sandbox_auth_token', result.data.token);
+      setCookie('_sandbox_auth_node_id', result.data.nodeId);
+    }
+    return result.data;
+  };
+
+  const logout = async () => {
+    const result = await axios.get(`/api/auth/logout`);
+    if (result.data && !result.data.error) {
+      setCookie('_sandbox_auth_token', '');
+      setCookie('_sandbox_auth_node_id', '');
+    }
+    return result.data;
+  };
 
   return <context.Provider value={{
-    _sandbox_auth_info,
+    auth_token,
+    node_id,
+    localLogin,
+    logout,
   }}>{children}</context.Provider>;
 };
 

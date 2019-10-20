@@ -24,7 +24,6 @@ export default wrapPage(() => {
       <VisibilitySensor
         offset={{ top: 100, bottom: 100 }}
         onChange={isVisible => {
-          console.log(isVisible);
           setVis1({ opacity: isVisible ? 1 : 0 });
         }}
       >

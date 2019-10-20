@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import Cookies from 'js-cookie';
 
@@ -12,13 +12,15 @@ import Link from 'next/link';
 import { useAuth } from '../../imports/packages/auth/react';
 
 export default wrapPage(() => {
-  const { _sandbox_auth_info } = useAuth();
+  const { auth_token, node_id, localLogin, logout } = useAuth();
+
+  const [ajaxR, setAjaxR] = useState<any>();
+
   return (
     <>
       <div>
-        <pre>
-        _sandbox_auth_info: {JSON.stringify(_sandbox_auth_info, null, 2)}
-        </pre>
+        <div>_sandbox_auth_token: {auth_token}</div>
+        <div>_sandbox_auth_node_id: {node_id}</div>
         <hr/>
         <div>
           <Link href="/api/auth/google"><a>/api/auth/google</a></Link>
@@ -32,10 +34,31 @@ export default wrapPage(() => {
         <div>
           <Link href="/api/auth/ok"><a>/api/auth/ok</a></Link>
         </div>
+        <div>
+          <Link href="/api/auth/ok?username=abc&password=def"><a>/api/auth/local abc def</a></Link>
+        </div>
+        <div>
+          <Link href="/api/auth/ok?username=abc&password=abc"><a>/api/auth/local abc abc</a></Link>
+        </div>
         <hr/>
         <div>
           <Link href="/api/auth/logout"><a>/api/auth/logout</a></Link>
         </div>
+        <hr/>
+        <div>
+          <a href="#" onClick={async () => setAjaxR(await localLogin('abc','def'))}>ajax /api/auth/local abc def</a>
+        </div>
+        <div>
+          <a href="#" onClick={async () => setAjaxR(await localLogin('abc','abc'))}>ajax /api/auth/local abc abc</a>
+        </div>
+        <hr/>
+        <div>
+          <a href="#" onClick={async () => setAjaxR(await logout())}>ajax /api/auth/logout</a>
+        </div>
+        <hr/>
+        <pre>
+          {JSON.stringify(ajaxR, null, 2)}
+        </pre>
       </div>
     </>
   );

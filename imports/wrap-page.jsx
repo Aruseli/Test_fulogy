@@ -7,6 +7,8 @@ import { ThemeProvider } from '@material-ui/styles';
 import { SnackbarProvider, useSnackbar } from 'notistack';
 import { AuthProvider, useAuthRedirect } from './packages/auth/react';
 
+import { CookiesProvider } from './packages/cookies';
+
 /**
  * Base app page wrapper. Provide ssr gql and analitics.
  * @param {function} Component
