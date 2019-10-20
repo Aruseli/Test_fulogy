@@ -1,6 +1,6 @@
 // @flow
 
-import React, { createContext, useCallback, useContext, useEffect } from "react";
+import React, { createContext, useCallback, useContext, useState, useEffect } from "react";
 
 import Cookies from 'js-cookie';
 import { useRouter } from "next/router";
@@ -14,6 +14,7 @@ interface IAuthContext {
   node_id?: string;
   localLogin: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  loading?: boolean;
 }
 
 export const defaultAuthContext = {
@@ -31,25 +32,30 @@ export const AuthProvider = ({
   children: any;
 } = {}) => {
   const { cookies, setCookie } = useCookies();
+  const [loading, setLoading] = useState(false);
 
   const auth_token = cookies._sandbox_auth_token;
   const node_id = cookies._sandbox_auth_node_id;
 
   const localLogin = async (username: string, password: string) => {
+    setLoading(true);
     const result = await axios.get(`/api/auth/local?username=${username}&password=${password}`);
     if (result.data && !result.data.error) {
       setCookie('_sandbox_auth_token', result.data.token);
       setCookie('_sandbox_auth_node_id', result.data.nodeId);
     }
+    setLoading(false);
     return result.data;
   };
 
   const logout = async () => {
+    setLoading(true);
     const result = await axios.get(`/api/auth/logout`);
     if (result.data && !result.data.error) {
       setCookie('_sandbox_auth_token', '');
       setCookie('_sandbox_auth_node_id', '');
     }
+    setLoading(false);
     return result.data;
   };
 
@@ -58,6 +64,7 @@ export const AuthProvider = ({
     node_id,
     localLogin,
     logout,
+    loading,
   }}>{children}</context.Provider>;
 };
 

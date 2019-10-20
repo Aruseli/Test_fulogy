@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { useAuth } from '../../imports/packages/auth/react';
 
 export default wrapPage(() => {
-  const { auth_token, node_id, localLogin, logout } = useAuth();
+  const { auth_token, node_id, localLogin, logout, loading } = useAuth();
 
   const [ajaxR, setAjaxR] = useState<any>();
 
@@ -34,6 +34,7 @@ export default wrapPage(() => {
         <div>
           <Link href="/api/auth/ok"><a>/api/auth/ok</a></Link>
         </div>
+        <hr/>
         <div>
           <Link href="/api/auth/ok?username=abc&password=def"><a>/api/auth/local abc def</a></Link>
         </div>
@@ -56,6 +57,9 @@ export default wrapPage(() => {
           <a href="#" onClick={async () => setAjaxR(await logout())}>ajax /api/auth/logout</a>
         </div>
         <hr/>
+        <div>
+          loading: {loading ? 'true' : 'false'}
+        </div>
         <pre>
           {JSON.stringify(ajaxR, null, 2)}
         </pre>

@@ -16,10 +16,14 @@ export const initAuthLocal = async (req: ClientRequest, res: ServerResponse, apo
   const username = _.get(req, 'query.username');
   const password = _.get(req, 'query.password');
 
-  const result = await validate_and_define_node_with_username_and_password_return_new_auth_token({
-    apolloClient,
-    username, password,
-  });
-
+  let result;
+  try {
+    result = await validate_and_define_node_with_username_and_password_return_new_auth_token({
+      apolloClient,
+      username, password,
+    });
+  } catch(error) {
+    return res.send({ error: 'broken' });
+  }
   res.send(result);
 };
