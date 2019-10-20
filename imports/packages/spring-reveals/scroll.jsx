@@ -6,12 +6,12 @@ import { useSpring, animated as a, interpolate } from 'react-spring'
 import { useTheme, makeStyles } from '@material-ui/core';
 
 export interface ISpringRevealsScrollContext {
-  scrollSpring: { s: any; slh: any; slw: any; };
+  scrollSpring: { s: any; slh: any; slw: any; xy: any[] };
   setScrollSpring?: any;
 };
 
 export const SpringRevealsScrollContext = createContext<ISpringRevealsScrollContext>({
-  scrollSpring: { s: null, slh: null, slw: null, },
+  scrollSpring: { s: null, slh: null, slw: null, xy: [] },
 });
 
 export function useSpringRevealsScroll({
@@ -44,6 +44,7 @@ export const SpringRevealsScrollProvider = ({
     s: 0,
     slh: 0,
     slw: 0,
+    xy: [0, 0],
   }));
   const onScroll = useCallback(e => {
     setScrollSpring({
@@ -52,10 +53,24 @@ export const SpringRevealsScrollProvider = ({
       slw: scrollRef.current.clientWidth,
     });
   }, []);
+  const onMouseMove = useCallback(
+    ({ clientX: x, clientY: y }) => setScrollSpring({
+      xy: [
+        -(y - scrollRef.current.clientHeight / 2),
+        (x - scrollRef.current.clientWidth / 2),
+      ],
+    })
+  );
   const classes = useStyle();
   const scrollRef: any = useRef();
 
-  return <div ref={scrollRef} onScroll={onScroll} className={classes.scroll} {...props}>
+  return <div
+    ref={scrollRef}
+    onScroll={onScroll}
+    onMouseMove={onMouseMove}
+    className={classes.scroll}
+    {...props}
+  >
     <context.Provider value={{
       scrollSpring,
       setScrollSpring,

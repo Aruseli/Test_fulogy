@@ -19,7 +19,7 @@ const useStyle = makeStyles(() => ({
 export const Item = ({
   scrollContext = SpringRevealsScrollContext,
   screenContext = SpringRevealsScreenContext,
-  transform = (s, t, slw, slh, snw, snh, v) => `translateY(${t - (s + (slh / 2))}px)`,
+  transform = ({ s, t, slw, slh, snw, snh, v }: any) => `translateY(${t - (s + (slh / 2))}px)`,
   style,
   wrapperProps,
   sensorProps,
@@ -33,14 +33,14 @@ export const Item = ({
   sensorProps?: any;
 }) => {
   const [{ v }, setItemSpring] = useSpring(() => ({ v: 0 }));
-  const { scrollSpring: { s, slw, slh } } = useSpringRevealsScroll({ context: scrollContext });
+  const { scrollSpring: { s, slw, slh, xy } } = useSpringRevealsScroll({ context: scrollContext });
   const { screenSpring: { t, snw, snh } } = useSpringRevealsScreen({ context: screenContext });
 
   const classes = useStyle();
 
   const transformSpring = interpolate(
-    [s, t, slw, slh, snw, snh, v],
-    transform,
+    [s, t, slw, slh, snw, snh, xy, v],
+    (s, t, slw, slh, snw, snh, xy, v) => transform({ s, t, slw, slh, snw, snh, xy, v }),
   );
 
   return <VisibilitySensor

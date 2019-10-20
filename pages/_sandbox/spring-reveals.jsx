@@ -27,9 +27,11 @@ export default () => {
         sensorProps={{
           offset: { top: 100, bottom: 100 },
         }}
-        transform={(s, t, slw, slh, snw, snh, v) => (`
+        transform={({ s, t, slw, slh, snw, snh, v, xy }) => (console.log(xy),`
           translateY(${(t-(s+((slh/2)-(snh/2))))*0.2}px)
           scaleX(${v})
+          perspective(600px)
+          rotateX(${xy[0] * 0.2}deg) rotateY(${xy[1] * 0.2}deg)
         `)}
         wrapperProps={{
           style: {
