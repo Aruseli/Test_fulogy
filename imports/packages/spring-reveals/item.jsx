@@ -45,7 +45,7 @@ export const Item = ({
   sensorProps?: any;
   times?: number;
   onTimesChange?: (times: number) => void;
-  onChangeVisible?: (props: { v: number, vt: number, delay: (time: number, callback: () => void) => Promise<void>, update: () => void }) => any;
+  onChangeVisible?: (props: { v: number, vt: number, delay: (time: number, callback?: () => void) => Promise<void>, update: () => void }) => any;
 }) => {
   const [timesState, setTimesState] = useState(times);
   const [{ v, vt }, setItemSpring] = useSpring(() => ({ v: 0, vt: 0 }));
