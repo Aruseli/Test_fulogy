@@ -6,12 +6,12 @@ import { useSpring, animated as a, interpolate } from 'react-spring'
 import { useTheme, makeStyles } from '@material-ui/core';
 
 export interface ISpringRevealsScrollContext {
-  scrollSpring: { s: any; slh: any; slw: any; xy: any[] };
+  scrollSpring: { sl: any; slh: any; slw: any; xy: any[] };
   setScrollSpring?: any;
 };
 
 export const SpringRevealsScrollContext = createContext<ISpringRevealsScrollContext>({
-  scrollSpring: { s: null, slh: null, slw: null, xy: [] },
+  scrollSpring: { sl: null, slh: null, slw: null, xy: [] },
 });
 
 export function useSpringRevealsScroll({
@@ -41,14 +41,14 @@ export const SpringRevealsScrollProvider = ({
   [string]: any;
 }) => {
   const [scrollSpring, setScrollSpring] = useSpring(() => ({
-    s: 0,
+    sl: 0,
     slh: 0,
     slw: 0,
     xy: [0, 0],
   }));
   const onScroll = useCallback(e => {
     setScrollSpring({
-      s: e.target.scrollTop,
+      sl: e.target.scrollTop,
       slh: scrollRef.current.clientHeight,
       slw: scrollRef.current.clientWidth,
     });
