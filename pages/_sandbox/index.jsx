@@ -66,5 +66,10 @@ export default () => (
         <div>auth</div>
       </a>
     </Link>
+    <Link href="/_sandbox/ssr-use-router">
+      <a>
+        <div>ssr-use-router</div>
+      </a>
+    </Link>
   </div>
 );

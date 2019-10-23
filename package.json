@@ -45,6 +45,7 @@
     "next": "9.0.6",
     "next-compose-plugins": "2.2.0",
     "next-optimized-images": "2.5.3",
+    "next-server": "^9.0.5",
     "next-with-apollo": "latest",
     "node-fetch": "latest",
     "nookies": "^2.0.8",

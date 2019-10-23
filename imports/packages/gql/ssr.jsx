@@ -1,15 +1,17 @@
 // @flow
 
-import React from 'react';
+import React, { useContext } from 'react';
 
 import ApolloClient from 'apollo-client';
 
 import { getDataFromTree } from '@apollo/react-ssr';
 import { parseCookies } from 'nookies'
 import { ApolloProvider } from '@apollo/react-hooks';
+import { RouterContext } from 'next-server/dist/lib/router-context';
 
 import { generateApolloClient } from './';
-import { CookiesProvider } from '../cookies'
+import { CookiesProvider } from '../cookies';
+import { useRouter as _useRouter } from 'next/router';
 
 /**
  * Wrap page for privide apolloClient and build server render based on nextjs async getInitialProps.
@@ -24,23 +26,35 @@ export const wrapSsrGql = ({
 }: {
   Component: any; gqlSecret?: string; gqlPath?: string;
 }) => {
-  const Component = ({ apolloClient, cookies }: { apolloClient: ApolloClient, cookies: any }) => {
+  const Component = ({
+    apolloClient, cookies, token, router,
+  }: {
+    apolloClient: ApolloClient; cookies: any; token: any; router: any;
+  }) => {
+    const _router = _useRouter();
+
     return (
-      <CookiesProvider cookies={cookies}>
-        <ApolloProvider client={apolloClient}>
-          <Content />
-        </ApolloProvider>
-      </CookiesProvider>
+      <RouterContext.Provider value={_router || router}>
+        <CookiesProvider cookies={cookies}>
+          <ApolloProvider client={apolloClient}>
+            <Content />
+          </ApolloProvider>
+        </CookiesProvider>
+      </RouterContext.Provider>
     );
   };
 
-  const Page = ({ apolloState, token, cookies }: { apolloState: any; token: string | void, cookies: any }) => {
+  const Page = ({
+    apolloState, token, cookies, router
+  }: {
+    apolloState: any; token: string | void; cookies: any; router: any;
+  }) => {
     const apolloClient = generateApolloClient(apolloState, {
       token,
       secret: gqlSecret,
       path: gqlPath,
     });
-    const container = <Component apolloClient={apolloClient} token={token} cookies={cookies}/>;
+    const container = <Component apolloClient={apolloClient} token={token} cookies={cookies} router={router}/>;
     apolloClient.stop();
     return container;
   };
@@ -59,12 +73,16 @@ export const wrapSsrGql = ({
       },
     );
     await getDataFromTree(
-      <Component apolloClient={apolloClient} token={token} cookies={cookies} />,
+      <Component apolloClient={apolloClient} token={token} cookies={cookies} router={{ query: props.query, pathname: props.pathname, asPath: props.asPath }}/>,
     );
     const apolloState: any = apolloClient.extract();
     apolloClient.stop();
-    return { apolloState, token, cookies };
+    return { apolloState, token, cookies, router: { query: props.query, pathname: props.pathname, asPath: props.asPath } };
   };
 
   return Page;
 };
+
+export function useRouter() {
+  return useContext(RouterContext);
+}
