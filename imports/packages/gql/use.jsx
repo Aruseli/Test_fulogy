@@ -41,7 +41,8 @@ export const toGqls = _.memoize(queryString => {
 export function useGql(queryString: string, options: any = {}) {
   const { query, subscription } = toGqls(queryString);
 
-  const qr = useQuery(query, { ssr: true, ...options });
+  // $flowignore
+  const qr = useQuery(query, { ssr: !process.browser, ...options });
   const sr = useSubscription(subscription, options);
 
   if (sr && sr.loading)

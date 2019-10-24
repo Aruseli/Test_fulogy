@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { AnaliticsProvider } from './packages/analitics';
 import { wrapSsrGql } from './packages/gql/ssr';
 import { defaultTheme } from './themes/default';

@@ -13,6 +13,15 @@ import { generateApolloClient } from './';
 import { CookiesProvider } from '../cookies';
 import { useRouter as _useRouter } from 'next/router';
 
+const getStorage = () => {
+  // $flowignore
+  if (process.browser) {
+    return window;
+  } else {
+    return {};
+  }
+};
+
 /**
  * Wrap page for privide apolloClient and build server render based on nextjs async getInitialProps.
  * @param {object} options
@@ -26,6 +35,7 @@ export const wrapSsrGql = ({
 }: {
   Component: any; gqlSecret?: string; gqlPath?: string;
 }) => {
+  console.log({ gqlSecret, gqlPath });
   const Component = ({
     apolloClient, cookies, token, router,
   }: {
@@ -49,11 +59,14 @@ export const wrapSsrGql = ({
   }: {
     apolloState: any; token: string | void; cookies: any; router: any;
   }) => {
-    const apolloClient = generateApolloClient(apolloState, {
+    const storage = getStorage();
+    const apolloClient = storage.__apolloClient ? storage.__apolloClient : generateApolloClient(apolloState, {
       token,
       secret: gqlSecret,
       path: gqlPath,
     });
+    storage.__apolloClient = apolloClient;
+
     const container = <Component apolloClient={apolloClient} token={token} cookies={cookies} router={router}/>;
     apolloClient.stop();
     return container;

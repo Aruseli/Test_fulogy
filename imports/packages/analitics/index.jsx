@@ -43,7 +43,7 @@ export const AnaliticsProvider = ({
   facebookPixel: string | number | null;
   googleAnalitics: string | number | null;
   yandexMetrika: string | number | null;
-  context: React$Context<IAnaliticsContext>;
+  context?: React$Context<IAnaliticsContext>;
   children: any;
 }) => {
   const router = useRouter();

@@ -28,7 +28,7 @@ export const AuthProvider = ({
   context = AuthContext,
   children,
 }: {
-  context: React$Context<IAuthContext>;
+  context?: React$Context<IAuthContext>;
   children: any;
 } = {}) => {
   const { cookies, setCookie } = useCookies();
