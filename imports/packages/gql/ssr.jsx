@@ -35,7 +35,6 @@ export const wrapSsrGql = ({
 }: {
   Component: any; gqlSecret?: string; gqlPath?: string;
 }) => {
-  console.log({ gqlSecret, gqlPath });
   const Component = ({
     apolloClient, cookies, token, router,
   }: {
