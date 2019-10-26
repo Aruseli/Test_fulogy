@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import ReactResizeDetector from 'react-resize-detector';
 
 export const ChildrenResponsive = ({
-  children, style, ...props
+  children, style, fill = true, ...props
 }: {
   [string]: any;
 }) => {
@@ -24,7 +24,7 @@ export const ChildrenResponsive = ({
   const h1: number = (sizeIn.height * sizeOut.height) / sizeIn.height;
   const p1: number = sizeIn.width / sizeIn.height;
   const p2: number = w1 / h1;
-  const p: boolean = p1 > p2;
+  const p = fill ? p1 > p2 : p2 > p1;
   const w2: number = p ? sizeOut.height / sizeIn.height : sizeOut.width / sizeIn.width;
   const h2: number = p ? sizeOut.height / sizeIn.height : sizeOut.width / sizeIn.width;
 
