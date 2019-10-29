@@ -37,8 +37,7 @@ export const Solutions = ({ symptom }: { symptom: string }) => {
 
   return <>
     {time && loading ? <LinearProgress /> : <LinearProgress variant="determinate" value={0}/>}
-    {!!error && <pre>{error}</pre>}
-    {!!symptom.trim() && <>
+    {!!symptom.trim() && loading && <>
       <List>
         {!!data && <>
           {data.symptoms.map(symptom => (<React.Fragment key={symptom.id}>
