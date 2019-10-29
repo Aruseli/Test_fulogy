@@ -53,6 +53,23 @@ Optional environment:
 PATH_PREFIX='/my-repo'
 ```
 
+## manual fork
+
+```bash
+git clone https://github.com/ivansglazunov/sandbox.git my-project
+cd my-project
+git remote remove origin
+git remote add origin https://github.com/<my>/<repo>.git
+```
+
+#### manual sync from sandbox
+
+```bash
+git remote add sandbox https://github.com/ivansglazunov/sandbox.git
+git pull sandbox
+git merge sandbox/master
+```
+
 ## proxy
 
 Edit `pages/api`.
