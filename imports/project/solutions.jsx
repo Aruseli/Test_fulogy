@@ -26,11 +26,14 @@ export const Solutions = ({ symptom }: { symptom: string }) => {
   const [time, setTime] = useState(null);
 
   useEffect(() => {
+    clearTimeout(time);
     setTime(setTimeout(() => {
       setTime(null);
       refetch({ value: `%${symptom.trim()}%` });
     }, 1000));
   }, [symptom]);
+
+  console.log(data.symptoms);
 
   return <>
     {time && loading ? <LinearProgress /> : <LinearProgress variant="determinate" value={0}/>}
@@ -42,7 +45,7 @@ export const Solutions = ({ symptom }: { symptom: string }) => {
             <ListItem key={symptom.id} disabled>
               <ListItemText>{symptom.value}</ListItemText>
             </ListItem>
-            {symptom.solutions.map(solution => (
+            {data.symptoms.length === 1 && symptom.solutions.map(solution => (
               <ListItem key={solution.id}>
                 <ListItemText>{solution.value}</ListItemText>
               </ListItem>
