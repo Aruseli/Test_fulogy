@@ -7,7 +7,6 @@ import 'moment/locale/ru';
 const resources = {
   ru: {
     translation: {
-      entrySymptom: 'Введите симптом:',
     },
   },
 };
