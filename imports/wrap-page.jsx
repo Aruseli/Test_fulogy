@@ -5,6 +5,8 @@ import { wrapSsrGql } from './packages/gql/ssr';
 import { defaultTheme } from './themes/default';
 
 import 'normalize.css';
+import { DndProvider } from 'react-dnd-cjs';
+import HTML5Backend from 'react-dnd-html5-backend-cjs';
 import { ThemeProvider } from '@material-ui/styles';
 import { SnackbarProvider, useSnackbar } from 'notistack';
 import { AuthProvider, useAuthRedirect } from './packages/auth/react';
@@ -26,19 +28,21 @@ export const wrapPage = Component => {
       useAuthRedirect();
 
       return (
-        <AuthProvider>
-          <ThemeProvider theme={defaultTheme}>
-            <SnackbarProvider maxSnack={3}>
-              <AnaliticsProvider 
-                facebookPixel={process.env.BG_TOKEN}
-                googleAnalitics={process.env.GA_TOKEN}
-                yandexMetrika={process.env.YM_TOKEN}
-              >
-                <Component />
-              </AnaliticsProvider>
-            </SnackbarProvider>
-          </ThemeProvider>
-        </AuthProvider>
+        <DndProvider backend={HTML5Backend}>
+          <AuthProvider>
+            <ThemeProvider theme={defaultTheme}>
+              <SnackbarProvider maxSnack={3}>
+                <AnaliticsProvider 
+                  facebookPixel={process.env.BG_TOKEN}
+                  googleAnalitics={process.env.GA_TOKEN}
+                  yandexMetrika={process.env.YM_TOKEN}
+                >
+                  <Component />
+                </AnaliticsProvider>
+              </SnackbarProvider>
+            </ThemeProvider>
+          </AuthProvider>
+        </DndProvider>
       );
     },
   });

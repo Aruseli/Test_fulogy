@@ -60,15 +60,6 @@ export const Results = ({ onNodeClick, query, variables, viewMode }) => {
       nodes={nodes}
       links={links}
       onNodeClick={onNodeClick}
-      // addRootNode={() => addRootNode({ variables: { nodeId: uniqid() } })}
-      // deleteNode={async (nodeId) => {
-      //   try {
-      //     await deleteNode({ variables: { nodeId } });
-      //     enqueueSnackbar('deleteNode: deleted', nodeId);
-      //   } catch(error) {
-      //     enqueueSnackbar('deleteNode: error', error);
-      //   }
-      // }}
     />}
   </>;
 };
