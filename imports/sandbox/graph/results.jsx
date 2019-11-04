@@ -8,6 +8,7 @@ import { useParsed } from '../../packages/graph/parse';
 import uniqid from 'uniqid';
 
 import { ReactJson } from '../../packages/react-json';
+import { Tabs, Tab } from '@material-ui/core';
 
 const ADD_ROOT_NODE = gql`mutation AddRootNode($nodeId: String) {
   insert_nodes(objects: {id: $nodeId}) {
@@ -28,12 +29,23 @@ const DELETE_NODE = gql`mutation DeleteNode($nodeId: String) {
 export const Results = ({ onNodeClick, query, variables, viewMode }) => {
   const { enqueueSnackbar } = useSnackbar();
 
+  const [index, setIndex] = useState(0);
+  const [history, setHistory] = useState([]);
+
   const result = useGql(query, { variables });
   const [parsed, setParsed] = useState({});
-  const { nodes, links } = useParsed(result.data, parsed);
+  const { nodes, links } = useParsed(history[index], parsed);
 
   const [addRootNode] = useMutation(ADD_ROOT_NODE);
   const [deleteNode] = useMutation(DELETE_NODE);
+
+  useEffect(() => {
+    console.log('mount or render');
+    setHistory([ result.data, ...history.slice(0, 10) ]);
+    return () => {
+      console.log('unmount');
+    }
+  }, [result.data]);
 
   return <>
     {/* <pre>{JSON.stringify(query, null, 2)}</pre>
@@ -61,5 +73,12 @@ export const Results = ({ onNodeClick, query, variables, viewMode }) => {
       links={links}
       onNodeClick={onNodeClick}
     />}
+    <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%' }}>
+      <Tabs value={index} onChange={(e, v) => setIndex(v)} fullWidth variant="scrollable">
+        {history.map((h, i) => (
+          <Tab value={i} label={i}/>
+        ))}
+      </Tabs>
+    </div>
   </>;
 };

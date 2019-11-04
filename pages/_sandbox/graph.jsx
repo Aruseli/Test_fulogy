@@ -22,91 +22,10 @@ import Graphiql, { generateGraphiqlFetcher } from '../../imports/packages/graphi
 import { defaultTheme } from '../../imports/themes/default';
 import { Results } from '../../imports/sandbox/graph/results';
 import { ReactJson } from '../../imports/packages/react-json';
+import {
+  QUERY, ADD_ROOT_NODE, ADD_CHILD_NODE, INSERT_LINK, DELETE_NODE, DELETE_LINK,
+} from '../../imports/sandbox/graph/gql';
 import { useSnackbar } from 'notistack';
-
-const QUERY = gql`{
-  nodes {
-    id
-    links_indexes_by_list_node {
-      id
-      index_link_id
-      index_node_id
-      list_id
-      list_node_id
-      depth
-    }
-    links_by_source {
-      id
-      source_id
-      target_id
-      node_id
-      type_id
-    }
-    links_by_target {
-      id
-      source_id
-      target_id
-      node_id
-      type_id
-    }
-  }
-}`;
-
-const ADD_ROOT_NODE = gql`mutation AddRootNode($nodeId: String) {
-  insert_nodes(objects: {id: $nodeId}) {
-    returning {
-      id
-    }
-  }
-}`;
-
-const ADD_CHILD_NODE = gql`mutation AddChildNode(
-  $nodeId: String,
-  $sourceNodeId: String
-) {
-  insert_nodes(objects: {
-    links_by_target: {data: {
-      source_id: $sourceNodeId,
-      type_id: 1
-    }},
-    id: $nodeId
-  }) {
-    returning {
-      id
-    }
-  }
-}`;
-
-const INSERT_LINK = gql`mutation InsertLink(
-  $sourceId: String,
-  $targetId: String,
-) {
-  insert_links(objects: {
-    source_id: $sourceId,
-    target_id: $targetId,
-    type_id: 1
-  }) {
-    returning {
-      id
-    }
-  }
-}`;
-
-const DELETE_NODE = gql`mutation DeleteNode($id: String) {
-  delete_nodes(where: {id: {_eq: $id}}) {
-    returning {
-      id
-    }
-  }
-}`;
-
-const DELETE_LINK = gql`mutation DeleteNode($id: Int) {
-  delete_links(where: {id: {_eq: $id}}) {
-    returning {
-      id
-    }
-  }
-}`;
 
 const _fetcher = generateGraphiqlFetcher({
   path: process.env.GQL_PATH,
@@ -116,7 +35,7 @@ const _fetcher = generateGraphiqlFetcher({
 export default wrapPage(() => {
   const { enqueueSnackbar } = useSnackbar();
 
-  const [gql, setGql] = useUrlState('gql', { query: QUERY });
+  const [gql, setGql] = useState({ query: QUERY });
 
   const [query, setQuery] = useState(gql.query);
 
@@ -217,6 +136,13 @@ export default wrapPage(() => {
 
     return result;
   };
+
+  useEffect(() => {
+    console.log('2 mount or render');
+    return () => {
+      console.log('2 unmount');
+    }
+  });
 
   return (
     <>

@@ -166,6 +166,8 @@ const Nodes = ({
 export default wrapPage(() => {
   const classes = useStyles();
 
+  const [history, setHistory] = useState([]);
+
   const [_insertLink] = useMutation(INSERT_LINK);
   const insertLink = useCallback((sourceId, targetId) => _insertLink({ variables: { sourceId, targetId, typeId: 1 } }));
   const [_deleteLink] = useMutation(DELETE_LINK);
@@ -183,6 +185,10 @@ export default wrapPage(() => {
     links: _.get(ls, 'links', []),
     links_indexes: _.get(lis, 'links_indexes', []),
   };
+
+  useEffect(() => {
+    setHistory([...history.slice(-10), data]);
+  }, [data]);
 
   return <div className={classes.scroll}>
     <Unlink deleteLink={deleteLink}>
