@@ -4,10 +4,9 @@ import React from 'react';
 
 import { ThemeProvider } from '@material-ui/styles';
 
-import { Body } from '../imports/components/body';
-import { theme as defaultTheme } from '../imports/theme';
+import { defaultTheme } from '../imports/themes/default';
 
-import {TestPage} from "../imports/components/vshsdt/test-page/test-page";
+import {TestPage} from "../imports/test-page/test-page";
 
 
 export default () => {
@@ -15,9 +14,7 @@ export default () => {
   return (
   <>
     <ThemeProvider theme={defaultTheme}>
-      <Body>
         <TestPage />
-      </Body>
     </ThemeProvider>
   </>
   );

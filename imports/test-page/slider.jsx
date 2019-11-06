@@ -1,15 +1,15 @@
 import React, {useState} from 'react';
 
-import { ChildrenResponsive } from '../../../packages/children-responsive';
+import { ChildrenResponsive } from '../packages/children-responsive';
 
 import {Checkbox} from '@material-ui/core';
 import {Brightness1Outlined, Brightness1Rounded} from '@material-ui/icons';
 import {makeStyles} from '@material-ui/styles';
 
 
-const warm = require('../../../../images/warm.jpg?resize&size=300');
-const day = require('../../../../images/day.jpg?resize&size=300');
-const cold = require('../../../../images/cold.jpg?resize&size=300');
+const warm = require('../../images/warm.jpg?resize&size=300');
+const day = require('../../images/day.jpg?resize&size=300');
+const cold = require('../../images/cold.jpg?resize&size=300');
 
 const useStyle = makeStyles(() => ({
   animation: {

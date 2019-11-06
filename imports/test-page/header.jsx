@@ -5,14 +5,10 @@ import {
   IconButton,
   Paper,
   Badge,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
   makeStyles,
 } from '@material-ui/core';
 
-import { Menu, ShoppingCartOutlined, Close } from '@material-ui/icons';
+import { ShoppingCartOutlined } from '@material-ui/icons';
 
 import {MenuBlock} from './menu';
 
@@ -26,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Logo = require('../../../../images/lg.svg');
+const Logo = require('../../images/lg.svg');
 
 export const Header = () => {
   const classes = useStyles();

@@ -1,9 +1,7 @@
-import React, {useState, useRef} from 'react';
+import React, {useState} from 'react';
 import {
   Grid,
-  Paper,
   makeStyles,
-  Checkbox,
   Table,
   TableBody,
   TableRow,
@@ -15,7 +13,6 @@ import {
 import {PriorityHigh, CheckBox} from '@material-ui/icons';
 
 import {Slider} from './slider';
-import {Picture} from '../../../packages/picture/index';
 
 const useStyles = makeStyles(() => ({
   cover: {
@@ -39,17 +36,17 @@ const useStyles = makeStyles(() => ({
 const images=[
   {
     id: 1,
-    src: require('../../../../images/warm.jpg?resize&size=300'),
+    src: require('../../images/warm.jpg?resize&size=300'),
     alt: 'теплое освещение'
   },
   {
     id: 2,
-    src: require('../../../../images/day.jpg?resize&size=300'),
+    src: require('../../images/day.jpg?resize&size=300'),
     alt: 'дневное освещение'
   },
   {
     id: 3,
-    src: require('../../../../images/cold.jpg?resize&size=300'),
+    src: require('../../images/cold.jpg?resize&size=300'),
     alt: 'холодное освещение'
   }
 ]
