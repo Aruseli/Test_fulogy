@@ -1,15 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import { ChildrenResponsive } from '../packages/children-responsive';
 
-import {Checkbox} from '@material-ui/core';
+import {Checkbox, Grid} from '@material-ui/core';
 import {Brightness1Outlined, Brightness1Rounded} from '@material-ui/icons';
 import {makeStyles} from '@material-ui/styles';
-
-
-const warm = require('../../images/warm.jpg?resize&size=300');
-const day = require('../../images/day.jpg?resize&size=300');
-const cold = require('../../images/cold.jpg?resize&size=300');
 
 const useStyle = makeStyles(() => ({
   animation: {
@@ -22,6 +17,9 @@ const useStyle = makeStyles(() => ({
 
 export const Slider = ({images, checked}) => {
   const classes = useStyle();
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {setIndex(0)}, [checked]);
 
   return (
     <>
@@ -41,18 +39,37 @@ export const Slider = ({images, checked}) => {
             opacity: checked == value.id ? 1 : 0
           }}
         >
-          <ChildrenResponsive>
-            <img src={value.src} alt={value.alt} style={{width: '100%'}} />
-          </ChildrenResponsive>
-          {images.map((image) => {
-            <Checkbox 
-              key={image.id} 
-              icon={<Brightness1Outlined/>} 
-              checkedIcon={<Brightness1Rounded />} 
-              value="image.id" 
-              // onChange={}  
-            />
-          })}
+        {value.imgs.map((image, i) => (
+          <div key={i}
+            className={classes.animation}
+            style={{
+              opacity: index == i ? 1 : 0
+            }}
+          >
+            <ChildrenResponsive>
+              <img src={image} alt={value.alt} style={{width: '100%'}} />
+            </ChildrenResponsive>
+          </div>
+        ))}
+          <Grid
+            container
+            justify= 'center'
+            alignItems='center' style={{
+              position: 'absolute',
+              bottom: 0
+            }}>
+            <Grid item>
+              {value.imgs.map((image, i) => (
+                <Checkbox 
+                  key={i} 
+                  checked={i == index}
+                  icon={<Brightness1Outlined style={{color: '#fff', width: 15}} />} 
+                  checkedIcon={<Brightness1Rounded style={{color: '#fff', width: 15}} />}  
+                  onClick={() => setIndex(i)}  
+                />
+              ))} 
+            </Grid>
+          </Grid>
         </div>
       ))}
       </div>

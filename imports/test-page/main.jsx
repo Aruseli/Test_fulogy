@@ -37,17 +37,23 @@ const images=[
   {
     id: 1,
     src: require('../../images/warm.jpg?resize&size=300'),
-    alt: 'теплое освещение'
+    imgs: [require('../../images/warm.jpg?resize&size=600'), require('../../images/warm.jpg?resize&size=600'), require('../../images/warm.jpg?resize&size=600')],
+    alt: 'теплое освещение',
+    name: 'Теплый'
   },
   {
     id: 2,
     src: require('../../images/day.jpg?resize&size=300'),
-    alt: 'дневное освещение'
+    imgs: [require('../../images/day.jpg?resize&size=600'), require('../../images/day.jpg?resize&size=600'), require('../../images/day.jpg?resize&size=600')],
+    alt: 'дневное освещение',
+    name: 'Дневной'
   },
   {
     id: 3,
     src: require('../../images/cold.jpg?resize&size=300'),
-    alt: 'холодное освещение'
+    imgs: [require('../../images/cold.jpg?resize&size=600'), require('../../images/cold.jpg?resize&size=600'), require('../../images/cold.jpg?resize&size=600')],
+    alt: 'холодное освещение',
+    name: 'Холодный'
   }
 ]
 
@@ -160,6 +166,15 @@ export const MainBlocks = () => {
                     }}>
                     <ButtonBase onClick={() => setChecked(image.id)}>
                       <img src={image.src} alt={image.alt} width='100%' />
+                      <div style={{
+                        backgroundColor: 'rgba(0,0,0, .3)', 
+                        width: '100%', 
+                        minHeight: 30,
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        color: '#fff'  
+                      }}>{image.name}</div>
                     </ButtonBase>
                     { checked == image.id && <IconButton
                       classes={{label: classes.checkboxStyle}}
