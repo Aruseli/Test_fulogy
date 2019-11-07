@@ -8,6 +8,8 @@ import { defaultTheme } from '../imports/themes/default';
 
 import {TestPage} from "../imports/test-page/test-page";
 
+import 'normalize.css';
+
 
 export default () => {
   

@@ -86,6 +86,7 @@ export const MenuBlock = () => {
       {open ? <Close /> : <Menu />}
     </Button>
     <Popper open={open} anchorEl={anchorRef.current} transition disablePortal  
+      placement="bottom-end"
       style={{
         zIndex: 11111,
         width: '100%',
@@ -97,9 +98,11 @@ export const MenuBlock = () => {
         style={{
           transformOrigin: 'right top',
         }}>
-        <Paper>
+        <div>
           <ClickAwayListener onClickAway={handleClose}>
-            <MenuList
+            <MenuList style={{
+              transform: 'translateX(18px)'
+            }}
               className={classes.listMenu}
               autoFocusItem={open}
               id="menu-list-grow"
@@ -141,7 +144,7 @@ export const MenuBlock = () => {
               }>
             </MenuList>
           </ClickAwayListener>
-        </Paper>
+        </div>
       </Grow>
       )}
     </Popper>
