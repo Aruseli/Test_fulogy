@@ -36,14 +36,19 @@ export const Slider = ({images, checked}) => {
         <div key={value.id}
           className={classes.animation}
           style={{
-            opacity: checked == value.id ? 1 : 0
+            opacity: checked == value.id ? 1 : 0,
           }}
         >
         {value.imgs.map((image, i) => (
           <div key={i}
             className={classes.animation}
             style={{
-              opacity: index == i ? 1 : 0
+              opacity: index == i ? 1 : 0.5,
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+              top: 0,
+              left: `${(i-index)*100}%`
             }}
           >
             <ChildrenResponsive>
