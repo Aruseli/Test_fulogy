@@ -33,7 +33,7 @@
     "graphiql-explorer": "^0.4.4",
     "graphql": "^14.5.7",
     "graphql-tag": "2.10.1",
-    "http-proxy": "1.18.0",
+    "http-proxy": "1.18.1",
     "i18next": "^19.0.0",
     "image-trace-loader": "^0.1.0",
     "imagemin-gifsicle": "^6.0.1",
